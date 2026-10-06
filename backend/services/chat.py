@@ -19,7 +19,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from ai.identification import OLLAMA_MODEL, OLLAMA_URL
+from ai.identification import OLLAMA_URL, active_model
 from knowledge_base import loader
 from matching.engine import REUSE_END_USE, SECTOR_LABELS
 from services import analysis as analysis_service
@@ -223,8 +223,18 @@ def _answer_match_reason(analysis: dict, question: str, match_id: str | None) ->
 # ---------------------------------------------------------------------------
 
 
-def _llm_answer(analysis: dict, question: str) -> str | None:
+def _llm_answer(analysis: dict, question: str) -> tuple[str, str] | None:
+    """Grounded free-form answer from the local model, or None to stay deterministic.
+
+    Returns (text, model_used) so the caller can label the engine truthfully.
+    `active_model` also keeps a wedged Ollama from stalling the chat panel: if
+    the probe does not answer in ~2s we skip the LLM entirely.
+    """
     import httpx
+
+    model = active_model()
+    if model is None:
+        return None
 
     summary = (
         f"Material: {analysis['material']['name']} ({analysis['material']['category']}), "
@@ -239,7 +249,7 @@ def _llm_answer(analysis: dict, question: str) -> str | None:
         f"Totals (demo calculation): {analysis['totals']}."
     )
     payload = {
-        "model": OLLAMA_MODEL,
+        "model": model,
         "stream": False,
         "options": {"temperature": 0.2, "num_predict": 320},
         "messages": [
@@ -258,7 +268,8 @@ def _llm_answer(analysis: dict, question: str) -> str | None:
     try:
         resp = httpx.post(f"{OLLAMA_URL}/api/chat", json=payload, timeout=45.0)
         resp.raise_for_status()
-        return resp.json().get("message", {}).get("content", "").strip() or None
+        content = resp.json().get("message", {}).get("content", "").strip()
+        return (content, model) if content else None
     except (httpx.HTTPError, ValueError):
         return None
 
@@ -290,12 +301,13 @@ def answer(analysis: dict, question: str, match_id: str | None = None) -> dict[s
         text = _answer_material(analysis)
         grounded = ["identification", "material"]
     else:
-        llm_text = _llm_answer(analysis, question)
-        if llm_text:
+        result = _llm_answer(analysis, question)
+        if result:
+            llm_text, model = result
             return {
                 "answer": llm_text,
                 "grounded_in": ["analysis summary (LLM-augmented answer)"],
-                "engine": f"ollama:{OLLAMA_MODEL}",
+                "engine": f"ollama:{model}",
                 "confident": NO_INFO not in llm_text,
             }
         return {

@@ -92,13 +92,26 @@ the UI. With Ollama, identification handles free-form descriptions much better.
 # macOS / Linux — see https://ollama.com/download for the Windows installer
 curl -fsSL https://ollama.com/install.sh | sh
 
-ollama serve            # if it is not already running as a service
-ollama pull qwen2.5:3b  # ~1.9 GB download
-
-ollama list             # confirm qwen2.5:3b is present
+ollama serve              # if it is not already running as a service
+ollama pull qwen2.5:3b    # ~1.9 GB download — optional, see below
 ```
 
-Restart the backend. The badge in the top-right of the UI turns green and reads `Ollama · qwen2.5:3b`.
+**That is the whole setup. There is nothing to configure and no restart to do.** Symbio asks Ollama what is
+available on every request, so the badge in the top-right turns green the moment the server answers, and the next
+analysis uses the LLM. Stop Ollama and it drops back to demo mode just as fast.
+
+`qwen2.5:3b` is the model this project is built and tuned around, so it is what `ollama pull qwen2.5:3b` gets you
+and it always wins when present. It is **not** a hard requirement: if it is absent, Symbio drives whatever chat model
+you already have pulled (`qwen2.5`, `llama3.1`, `llama3.2`, `llama3`, `mistral`, `gemma2`, `phi3`), and the UI tells
+you which one it picked. A model that ignores the "reply with JSON only" instruction simply degrades to the
+deterministic classifier — the answer is validated and re-grounded against the knowledge base either way, so a
+substituted model can never invent a material.
+
+To force one exact model and disable the substitution:
+
+```bash
+OLLAMA_MODEL=qwen2.5:3b  # honoured exactly: used if present, otherwise fallback with a clear message
+```
 
 Symbio talks to Ollama over its local HTTP API only — no OpenAI, Gemini, Claude or other cloud model is used
 anywhere in the codebase.
@@ -140,14 +153,18 @@ The backend seeds three analyses on startup, so the dashboard is never empty.
 
 ## Configuration
 
-Copy `.env.example` and adjust only if you need to.
+Nothing has to be configured to run the demo: every value below already has a working default. The backend reads
+real environment variables and deliberately does **not** load a `.env` file, so `.env.example` is documentation —
+copy out only the lines you want to change, e.g. `OLLAMA_TIMEOUT_SECONDS=90 uvicorn backend.main:app --reload`.
 
 | Variable | Where | Default | Meaning |
 |---|---|---|---|
 | `OLLAMA_URL` | backend env | `http://localhost:11434` | Local Ollama server |
-| `OLLAMA_MODEL` | backend env | `qwen2.5:3b` | Identification model |
-| `OLLAMA_TIMEOUT_SECONDS` | backend env | `60` | Wait before falling back to the deterministic classifier |
+| `OLLAMA_MODEL` | backend env | `qwen2.5:3b` | Preferred model. Setting it explicitly *pins* it and turns auto-selection off |
+| `OLLAMA_TIMEOUT_SECONDS` | backend env | `60` | Wait for inference before falling back to the deterministic classifier |
+| `OLLAMA_PROBE_TIMEOUT_SECONDS` | backend env | `2` | Wait for the "is Ollama alive, and what does it have" check |
 | `BACKEND_URL` | `frontend/.env.local` | `http://localhost:8000` | Where Next.js proxies `/api/*` |
+| `PROXY_TIMEOUT_MS` | `frontend/.env.local` | `120000` | How long Next.js waits for the backend. Must exceed `OLLAMA_TIMEOUT_SECONDS` |
 
 No secrets are used anywhere, and `BACKEND_URL` is read server-side only, so it never reaches the browser.
 
@@ -382,9 +399,15 @@ The backend is not running on port 8000. Start it, then reload. `curl http://loc
 return JSON.
 
 **Badge reads "Demo mode · no Ollama"**
-Expected without Ollama — Symbio is using the deterministic classifier. To enable the LLM: `ollama serve`,
-`ollama pull qwen2.5:3b`, then restart the backend. If it stays amber after that, check that `OLLAMA_URL` matches
-where Ollama is actually listening (`curl http://localhost:11434/api/tags`).
+Expected without Ollama — Symbio is using the deterministic classifier. To enable the LLM: `ollama serve`, then
+`ollama pull qwen2.5:3b`. No restart is needed; the status is re-checked on every request and the badge turns green
+by itself. If it stays amber, check that `OLLAMA_URL` matches where Ollama is actually listening
+(`curl http://localhost:11434/api/tags` should return JSON).
+
+**Badge reads "Ollama · no model"**
+Ollama is answering but has nothing pulled, so there is no model to drive. `ollama list` will come back empty.
+Run `ollama pull qwen2.5:3b`, or any model from `OLLAMA_MODEL_PREFERENCE` — this state is amber, not red, because
+the demo still works through the deterministic classifier.
 
 **Identification is slow**
 `qwen2.5:3b` on CPU takes roughly 10–30 s per call. Raise `OLLAMA_TIMEOUT_SECONDS` if you see fallback warnings on

@@ -268,7 +268,19 @@ export interface HealthData {
   materials: number;
   recipients: number;
   analyses_stored: number;
-  ollama: { available: boolean; url: string; model: string; model_present: boolean; error?: string };
+  ollama: {
+    available: boolean;
+    /** A model Symbio can actually drive was found. Differs from `available`. */
+    usable: boolean;
+    url: string;
+    /** The model that will be used - auto-selected when the preferred one is absent. */
+    model: string;
+    requested_model: string;
+    auto_selected: boolean;
+    model_present: boolean;
+    installed_models?: string[];
+    error?: string;
+  };
 }
 
 export interface ChatResponse {

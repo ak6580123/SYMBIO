@@ -63,19 +63,7 @@ export default function Nav() {
         </nav>
 
         <div className="hidden shrink-0 items-center gap-2 sm:flex">
-          <StatusDot
-            ok={health ? health.ollama.available : false}
-            offline={offline}
-            label={
-              offline
-                ? 'API offline'
-                : health
-                  ? health.ollama.available
-                    ? `Ollama · ${health.ollama.model}`
-                    : 'Demo mode · no Ollama'
-                  : 'Checking…'
-            }
-          />
+          <StatusDot {...engineBadge(health, offline)} />
           <Link href="/analyze" className="btn-primary">
             Analyze Waste
           </Link>
@@ -85,18 +73,53 @@ export default function Nav() {
   );
 }
 
-function StatusDot({ ok, offline, label }: { ok: boolean; offline: boolean; label: string }) {
-  const color = offline ? 'bg-rose-400' : ok ? 'bg-emerald-400' : 'bg-amber-400';
+/**
+ * The badge has to tell three states apart, not two: Ollama running with a
+ * usable model, Ollama running but with nothing pulled, and Ollama absent. The
+ * middle one needs a different fix, and Symbio still works in it, so it is
+ * amber rather than red.
+ */
+function engineBadge(health: HealthData | null, offline: boolean): { tone: Tone; label: string; hint: string } {
+  if (offline) {
+    return { tone: 'off', label: 'API offline', hint: 'The FastAPI backend is not reachable on port 8000.' };
+  }
+  if (!health) {
+    return { tone: 'warn', label: 'Checking…', hint: 'Asking the backend for its status.' };
+  }
+  const o = health.ollama;
+  if (o.available && o.usable) {
+    return {
+      tone: 'good',
+      label: `Ollama · ${o.model}`,
+      hint: o.auto_selected
+        ? `Using ${o.model}, which is what you have pulled. Identification runs locally. ` +
+          `Pull ${o.requested_model} if you want the model this project is tuned for.`
+        : 'Ollama is running - identification uses the local LLM.',
+    };
+  }
+  if (o.available) {
+    return {
+      tone: 'warn',
+      label: 'Ollama · no model',
+      hint: `Ollama is answering on ${o.url} but has no model installed. Run \`ollama pull ${o.requested_model}\`. ` +
+        'Symbio still works, using its deterministic classifier.',
+    };
+  }
+  return {
+    tone: 'warn',
+    label: 'Demo mode · no Ollama',
+    hint: 'Ollama is not running - Symbio is using its deterministic fallback classifier.',
+  };
+}
+
+type Tone = 'good' | 'warn' | 'off';
+
+function StatusDot({ tone, label, hint }: { tone: Tone; label: string; hint: string }) {
+  const color = tone === 'good' ? 'bg-emerald-400' : tone === 'warn' ? 'bg-amber-400' : 'bg-rose-400';
   return (
     <span
       className="flex items-center gap-1.5 rounded-md border border-ink-700 bg-ink-850 px-2 py-1 text-[11px] text-slate-400"
-      title={
-        offline
-          ? 'The FastAPI backend is not reachable on port 8000.'
-          : ok
-            ? 'Ollama is running - identification uses the local LLM.'
-            : 'Ollama is not running - Symbio is using its deterministic fallback classifier.'
-      }
+      title={hint}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${color}`} />
       {label}

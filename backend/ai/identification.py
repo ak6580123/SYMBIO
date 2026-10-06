@@ -31,8 +31,32 @@ from knowledge_base.materials import (
 from models.schemas import MaterialIdentification
 
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
-OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:3b")
 OLLAMA_TIMEOUT = float(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "60"))
+
+# `qwen2.5:3b` is the model this project is built and tuned around. It is a
+# *preferred* tag rather than a hard requirement: if it is not installed we use
+# whatever the machine already has pulled, so `ollama serve` alone is enough to
+# get a working demo. Setting OLLAMA_MODEL explicitly pins the choice and turns
+# the auto-selection off - it will then be honoured exactly or not used at all.
+OLLAMA_MODEL = "qwen2.5:3b"
+OLLAMA_MODEL_PINNED = "OLLAMA_MODEL" in os.environ
+if OLLAMA_MODEL_PINNED:
+    OLLAMA_MODEL = os.environ["OLLAMA_MODEL"]
+
+# Local chat models known to follow a "reply with JSON only" instruction well
+# enough to be useful here. Anything we pick is still validated and re-grounded
+# against the knowledge base, so a non-compliant model degrades to the fallback
+# rather than producing a wrong answer.
+OLLAMA_MODEL_PREFERENCE = (
+    OLLAMA_MODEL.split(":")[0],  # qwen2.5 family first
+    "llama3.1",
+    "llama3.2",
+    "llama3",
+    "mistral",
+    "gemma2",
+    "phi3",
+)
+
 # Cheap reachability probe. Keeps an unresponsive-but-listening Ollama from
 # burning the whole inference timeout before we fall back.
 OLLAMA_PROBE_TIMEOUT = float(os.environ.get("OLLAMA_PROBE_TIMEOUT_SECONDS", "2"))
@@ -50,22 +74,34 @@ class OllamaUnresponsive(OllamaUnavailable):
     """
 
 
+class OllamaModelMissing(OllamaUnavailable):
+    """Ollama is running, but nothing Symbio can drive is installed.
+
+    Needs a different remedy from "start the server": one `ollama pull`. Carries
+    the installed tags so the advice can name them.
+    """
+
+    def __init__(
+        self, message: str, installed: list[str] | None = None, advice: str | None = None
+    ):
+        super().__init__(message)
+        self.installed = list(installed or [])
+        # Where the caller already knows the right fix, it can say so instead of
+        # letting us guess from the model list.
+        self.advice = advice
+
+
 # ---------------------------------------------------------------------------
 # Ollama
 # ---------------------------------------------------------------------------
 
 
-def probe_ollama() -> None:
-    """Fail fast if Ollama is not answering.
-
-    Raises OllamaUnavailable immediately (within ~OLLAMA_PROBE_TIMEOUT seconds)
-    when the server is down or wedged, so the caller can fall back to the
-    deterministic classifier instead of blocking for the full inference
-    timeout - which is what previously left the browser proxy hanging.
-    """
+def _installed_models(timeout: float | None = None) -> list[str]:
+    """Model tags Ollama reports, raising a Symbio-specific error on failure."""
     try:
-        resp = httpx.get(f"{OLLAMA_URL}/api/tags", timeout=OLLAMA_PROBE_TIMEOUT)
+        resp = httpx.get(f"{OLLAMA_URL}/api/tags", timeout=timeout or OLLAMA_PROBE_TIMEOUT)
         resp.raise_for_status()
+        models = resp.json().get("models", []) or []
     except httpx.TimeoutException as exc:
         raise OllamaUnresponsive(
             f"Ollama at {OLLAMA_URL} accepted the connection but did not respond "
@@ -73,35 +109,94 @@ def probe_ollama() -> None:
         ) from exc
     except httpx.HTTPError as exc:
         raise OllamaUnavailable(f"Ollama not reachable at {OLLAMA_URL}: {exc}") from exc
+    return [str(m.get("name") or m.get("model") or "") for m in models if m]
+
+
+def select_model(installed: list[str]) -> str | None:
+    """Choose which model to drive.
+
+    The recommended tag wins when present; otherwise we use the first already
+    pulled model in OLLAMA_MODEL_PREFERENCE, so a machine that merely has
+    Ollama running with *some* chat model works with no further setup. When
+    OLLAMA_MODEL was set explicitly we honour it exactly and substitute
+    nothing - a pinned choice is deliberate, not an accident.
+    """
+    if OLLAMA_MODEL_PINNED:
+        return next((n for n in installed if n.startswith(OLLAMA_MODEL)), None)
+
+    if OLLAMA_MODEL in installed:
+        return OLLAMA_MODEL
+    for family in OLLAMA_MODEL_PREFERENCE:
+        for name in installed:
+            if name.startswith(family):
+                return name
+    return None
+
+
+def probe_ollama() -> str:
+    """Fail fast unless Ollama is answering, and say which model to use.
+
+    Raises OllamaUnavailable within ~OLLAMA_PROBE_TIMEOUT seconds when the
+    server is down or wedged, so the caller can fall back to the deterministic
+    classifier instead of blocking for the full inference timeout - which is
+    what previously left the browser proxy hanging.
+    """
+    installed = _installed_models()
+    model = select_model(installed)
+    if model is None:
+        raise OllamaModelMissing(
+            f"Ollama is running at {OLLAMA_URL} but has no model Symbio can use", installed
+        )
+    return model
+
+
+def active_model() -> str | None:
+    """The model Symbio would use right now, or None if Ollama is not usable.
+
+    Never raises - for callers that only want to know whether to bother.
+    """
+    try:
+        return probe_ollama()
+    except OllamaUnavailable:
+        return None
 
 
 def ollama_status() -> dict:
-    """Cheap probe used by the /api/health endpoint and the UI badge."""
+    """Cheap probe used by the /api/health endpoint and the UI badge.
+
+    `available` means the server answered; `usable` means we also found a model
+    to drive. The badge needs both, because "running with nothing pulled" is a
+    real state and it needs a different fix than "not running".
+    """
+    base = {"url": OLLAMA_URL, "requested_model": OLLAMA_MODEL}
     try:
-        resp = httpx.get(f"{OLLAMA_URL}/api/tags", timeout=2.0)
-        resp.raise_for_status()
-        tags = resp.json().get("models", [])
-        names = [t.get("name", "") for t in tags]
-        return {
-            "available": True,
-            "url": OLLAMA_URL,
-            "model": OLLAMA_MODEL,
-            "model_present": any(n.startswith(OLLAMA_MODEL) for n in names),
-            "installed_models": names[:20],
-        }
+        names = _installed_models(timeout=2.0)
     except Exception as exc:  # connection refused, timeout, bad JSON...
         return {
+            **base,
             "available": False,
-            "url": OLLAMA_URL,
+            "usable": False,
             "model": OLLAMA_MODEL,
             "model_present": False,
+            "auto_selected": False,
+            "installed_models": [],
             "error": str(exc),
         }
+    model = select_model(names)
+    return {
+        **base,
+        "available": True,
+        "usable": model is not None,
+        "model": model or OLLAMA_MODEL,
+        "model_present": OLLAMA_MODEL in names,
+        "auto_selected": model is not None and model != OLLAMA_MODEL,
+        "installed_models": names[:20],
+    }
 
 
-def _call_ollama(description: str, composition: str | None, attached_text: str | None) -> str:
+def _call_ollama(description: str, composition: str | None, attached_text: str | None, model: str) -> str:
     payload = {
-        "model": OLLAMA_MODEL,
+        "model": model,
         "stream": False,
         "format": "json",
         "options": {"temperature": 0.1, "num_predict": 700},
@@ -122,9 +217,19 @@ def _call_ollama(description: str, composition: str | None, attached_text: str |
     }
     try:
         resp = httpx.post(f"{OLLAMA_URL}/api/chat", json=payload, timeout=OLLAMA_TIMEOUT)
-        resp.raise_for_status()
+    except httpx.HTTPStatusError as exc:
+        if exc.response.status_code == 404:
+            raise OllamaModelMissing(
+                f"Ollama has no model named {model}",
+                advice=(
+                    f"Ollama listed `{model}` but refused to run it - it may not be fully "
+                    f"downloaded. Run `ollama pull {model}` and try again."
+                ),
+            ) from exc
+        raise OllamaUnavailable(f"Ollama request failed: {exc}") from exc
     except httpx.HTTPError as exc:
         raise OllamaUnavailable(f"Ollama request failed: {exc}") from exc
+    resp.raise_for_status()
 
     content = resp.json().get("message", {}).get("content", "")
     if not content:
@@ -260,9 +365,10 @@ def identify(
     warnings = warnings if warnings is not None else []
 
     try:
-        probe_ollama()
-        raw = _extract_json(_call_ollama(description, composition, attached_text))
-        ident = _ground(raw, engine=f"ollama:{OLLAMA_MODEL}")
+        # One cheap request tells us the server is alive *and* which model to use.
+        model = probe_ollama()
+        raw = _extract_json(_call_ollama(description, composition, attached_text, model))
+        ident = _ground(raw, engine=f"ollama:{model}")
         # Merge any composition the user typed but the model dropped.
         if not ident.composition:
             ident.composition = fallback.parse_composition(composition or attached_text)
@@ -290,8 +396,29 @@ def _describe_failure(exc: Exception) -> str:
     if isinstance(exc, OllamaUnresponsive):
         return (
             f"Ollama at {OLLAMA_URL} accepted the connection but did not respond within "
-            f"{OLLAMA_PROBE_TIMEOUT:g}s. It is likely still loading {OLLAMA_MODEL}, or is "
-            "busy with another request - try again, or raise OLLAMA_PROBE_TIMEOUT_SECONDS."
+            f"{OLLAMA_PROBE_TIMEOUT:g}s. It is likely starting up, still loading a model, or "
+            "busy with another request - try again shortly, or raise OLLAMA_PROBE_TIMEOUT_SECONDS."
+        )
+    # Ollama answered but has nothing to run. Do not tell them to start Ollama.
+    if isinstance(exc, OllamaModelMissing):
+        if exc.advice:
+            return exc.advice
+        if OLLAMA_MODEL_PINNED:
+            return (
+                f"Ollama is running at {OLLAMA_URL} but the model you pinned is not installed "
+                f"(`OLLAMA_MODEL={OLLAMA_MODEL}`). Run `ollama pull {OLLAMA_MODEL}`, or unset "
+                "OLLAMA_MODEL to let Symbio use any model you already have."
+            )
+        if not exc.installed:
+            return (
+                f"Ollama is running at {OLLAMA_URL} but has no models installed. Run "
+                f"`ollama pull {OLLAMA_MODEL}` (recommended, about 1.9 GB)."
+            )
+        return (
+            f"Ollama is running at {OLLAMA_URL} but none of the installed models "
+            f"({', '.join(exc.installed)}) are ones Symbio can drive. Run "
+            f"`ollama pull {OLLAMA_MODEL}` (recommended, about 1.9 GB), or any of these: "
+            f"{', '.join(OLLAMA_MODEL_PREFERENCE)}."
         )
     if isinstance(exc, OllamaUnavailable):
         detail = str(exc).lower()
@@ -301,8 +428,8 @@ def _describe_failure(exc: Exception) -> str:
                 "Raise OLLAMA_TIMEOUT_SECONDS if your machine is slow, or use a smaller model."
             )
         return (
-            f"Ollama is not reachable at {OLLAMA_URL}. Start it with `ollama serve` and make sure "
-            f"`ollama pull {OLLAMA_MODEL}` has been run."
+            f"Ollama is not reachable at {OLLAMA_URL}. Start it with `ollama serve` - Symbio uses "
+            f"any chat model you already have pulled, and prefers {OLLAMA_MODEL}."
         )
     if isinstance(exc, json.JSONDecodeError):
         return "Ollama returned text that was not valid JSON."
