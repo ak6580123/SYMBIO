@@ -1,0 +1,36 @@
+# Optional convenience wrapper.
+#
+# The README's manual steps are the supported path and need nothing but Python
+# and Node. Use this only if you already have Docker and want both services to
+# start together. Ollama is intentionally NOT containerised here: it needs GPU
+# passthrough on some hosts and the README covers installing it natively.
+
+services:
+  backend:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+      - ./requirements.txt:/app/requirements.txt
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+             uvicorn main:app --host 0.0.0.0 --port 8000"
+    environment:
+      # Point this at host.docker.internal when Ollama runs on the host machine.
+      OLLAMA_URL: ${OLLAMA_URL:-http://host.docker.internal:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+    ports:
+      - "8000:8000"
+
+  frontend:
+    image: node:20-slim
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run dev -- --hostname 0.0.0.0 --port 3000"
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend

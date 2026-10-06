@@ -1,0 +1,22 @@
+# Symbio backend dependencies.
+# Install with:  pip install -r requirements.txt
+#
+# Only what the backend actually imports - no ORM, no database driver. The MVP
+# keeps analyses in process memory (see backend/services/storage.py), which is
+# the single place to swap for Supabase/Postgres later.
+fastapi==0.115.14
+uvicorn[standard]==0.32.1
+pydantic==2.13.5
+httpx==0.28.1
+python-multipart==0.0.32
+pypdf==6.19.0
+python-docx==1.2.0
+
+# Optional: better PDF text extraction on real-world reports.
+# Skipped by default because it is a ~25 MB binary wheel and pypdf already
+# covers the MVP. The code prefers it automatically if installed:
+#   pip install PyMuPDF
+# PyMuPDF==1.28.2
+
+# Development / tests
+pytest==9.1.1

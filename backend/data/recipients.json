@@ -1,0 +1,1182 @@
+[
+  {
+    "id": "rec_cement_01",
+    "company_name": "Coromandel Cement Materials",
+    "sector": "cement_manufacturing",
+    "location": "Red Hills, Chennai region",
+    "latitude": 13.194,
+    "longitude": 80.18,
+    "accepted_materials": [
+      "fly_ash",
+      "bottom_ash",
+      "steel_slag",
+      "bagasse_ash",
+      "rice_husk_ash",
+      "lime_sludge",
+      "marble_slurry",
+      "gypsum_waste",
+      "phosphogypsum",
+      "concrete_waste"
+    ],
+    "accepted_categories": [
+      "chemical_process",
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag",
+      "mineral_sludge",
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 3,
+    "max_quantity_t_per_month": 120,
+    "processing_capability": [
+      "drying",
+      "grinding",
+      "silos",
+      "bulk_logistics"
+    ],
+    "estimated_price_inr_per_tonne": 1950,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Buys pozzolanic residues as cement replacement. Demo buyer."
+  },
+  {
+    "id": "rec_cement_02",
+    "company_name": "Southern Blended Cements",
+    "sector": "cement_manufacturing",
+    "location": "Kanchipuram, Chennai region",
+    "latitude": 12.8352,
+    "longitude": 79.7036,
+    "accepted_materials": [
+      "fly_ash",
+      "bottom_ash",
+      "steel_slag",
+      "copper_slag"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 10,
+    "max_quantity_t_per_month": 250,
+    "processing_capability": [
+      "grinding",
+      "blending",
+      "rail_sidings"
+    ],
+    "estimated_price_inr_per_tonne": 1850,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Large-volume blended cement grinding unit. Demo buyer."
+  },
+  {
+    "id": "rec_cement_03",
+    "company_name": "Deccan Pozzolana Works",
+    "sector": "cement_manufacturing",
+    "location": "Vellore, Chennai region",
+    "latitude": 12.9165,
+    "longitude": 79.1325,
+    "accepted_materials": [
+      "fly_ash",
+      "rice_husk_ash",
+      "bagasse_ash"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 5,
+    "max_quantity_t_per_month": 80,
+    "processing_capability": [
+      "grinding",
+      "quality_lab"
+    ],
+    "estimated_price_inr_per_tonne": 2000,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Specialises in high-silica supplementary materials. Demo buyer."
+  },
+  {
+    "id": "rec_brick_01",
+    "company_name": "Padi Interlock Bricks",
+    "sector": "brick_manufacturing",
+    "location": "Padi, Chennai region",
+    "latitude": 13.0969,
+    "longitude": 80.1881,
+    "accepted_materials": [
+      "fly_ash",
+      "foundry_sand",
+      "bottom_ash",
+      "marble_slurry",
+      "brick_waste",
+      "concrete_waste",
+      "lime_sludge"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag",
+      "mineral_sludge"
+    ],
+    "min_quantity_t_per_month": 2,
+    "max_quantity_t_per_month": 40,
+    "processing_capability": [
+      "mixing",
+      "curing_yard",
+      "block_press"
+    ],
+    "estimated_price_inr_per_tonne": 1300,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Fly-ash brick and paver block line. Demo buyer."
+  },
+  {
+    "id": "rec_brick_02",
+    "company_name": "Ambattur Fly Ash Blocks",
+    "sector": "brick_manufacturing",
+    "location": "Ambattur, Chennai region",
+    "latitude": 13.0947,
+    "longitude": 80.1622,
+    "accepted_materials": [
+      "fly_ash",
+      "bottom_ash",
+      "marble_slurry",
+      "foundry_sand"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "metallurgical_slag",
+      "mineral_sludge"
+    ],
+    "min_quantity_t_per_month": 1,
+    "max_quantity_t_per_month": 25,
+    "processing_capability": [
+      "block_press",
+      "steam_curing"
+    ],
+    "estimated_price_inr_per_tonne": 1450,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Small-block producer, accepts partial loads. Demo buyer."
+  },
+  {
+    "id": "rec_brick_03",
+    "company_name": "Gummidipoondi Clay & Ash Bricks",
+    "sector": "brick_manufacturing",
+    "location": "Gummidipoondi, Chennai region",
+    "latitude": 13.41,
+    "longitude": 80.13,
+    "accepted_materials": [
+      "fly_ash",
+      "brick_waste",
+      "foundry_sand",
+      "bottom_ash"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 5,
+    "max_quantity_t_per_month": 60,
+    "processing_capability": [
+      "kiln",
+      "mixing",
+      "yard_storage"
+    ],
+    "estimated_price_inr_per_tonne": 1100,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Kiln-based producer blending ash into clay. Demo buyer."
+  },
+  {
+    "id": "rec_rmc_01",
+    "company_name": "Chennai Ready-Mix Concrete",
+    "sector": "ready_mix_concrete",
+    "location": "Guindy, Chennai region",
+    "latitude": 13.0067,
+    "longitude": 80.2206,
+    "accepted_materials": [
+      "fly_ash",
+      "concrete_waste",
+      "steel_slag",
+      "copper_slag"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 4,
+    "max_quantity_t_per_month": 60,
+    "processing_capability": [
+      "batching_plant",
+      "silos",
+      "lab_testing"
+    ],
+    "estimated_price_inr_per_tonne": 1750,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Uses fly ash in blended mixes. Demo buyer."
+  },
+  {
+    "id": "rec_rmc_02",
+    "company_name": "Tambaram Aggregates & RMC",
+    "sector": "ready_mix_concrete",
+    "location": "Tambaram, Chennai region",
+    "latitude": 12.9249,
+    "longitude": 80.1,
+    "accepted_materials": [
+      "concrete_waste",
+      "brick_waste",
+      "fly_ash",
+      "copper_slag"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 6,
+    "max_quantity_t_per_month": 90,
+    "processing_capability": [
+      "crushing",
+      "screening",
+      "batching"
+    ],
+    "estimated_price_inr_per_tonne": 900,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Runs its own crushing line for recycled aggregate. Demo buyer."
+  },
+  {
+    "id": "rec_constr_01",
+    "company_name": "Marina Infrastructure Projects",
+    "sector": "construction_company",
+    "location": "Perungudi, Chennai region",
+    "latitude": 12.9714,
+    "longitude": 80.2414,
+    "accepted_materials": [
+      "concrete_waste",
+      "brick_waste",
+      "steel_slag",
+      "bottom_ash",
+      "foundry_sand"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 10,
+    "max_quantity_t_per_month": 400,
+    "processing_capability": [
+      "earthworks",
+      "haulage",
+      "compaction"
+    ],
+    "estimated_price_inr_per_tonne": 550,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Takes inert fill for site works. Demo buyer."
+  },
+  {
+    "id": "rec_constr_02",
+    "company_name": "Pallavaram Site Services",
+    "sector": "construction_company",
+    "location": "Pallavaram, Chennai region",
+    "latitude": 12.9673,
+    "longitude": 80.149,
+    "accepted_materials": [
+      "concrete_waste",
+      "brick_waste",
+      "gypsum_waste"
+    ],
+    "accepted_categories": [
+      "construction_demolition"
+    ],
+    "min_quantity_t_per_month": 3,
+    "max_quantity_t_per_month": 60,
+    "processing_capability": [
+      "haulage",
+      "site_clearance"
+    ],
+    "estimated_price_inr_per_tonne": 480,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Small contractor, flexible volumes. Demo buyer."
+  },
+  {
+    "id": "rec_road_01",
+    "company_name": "Tamil Nadu Road Materials Unit",
+    "sector": "road_infrastructure",
+    "location": "Chromepet, Chennai region",
+    "latitude": 12.9516,
+    "longitude": 80.144,
+    "accepted_materials": [
+      "steel_slag",
+      "copper_slag",
+      "bottom_ash",
+      "foundry_sand",
+      "plastic_mixed",
+      "concrete_waste"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag",
+      "polymer"
+    ],
+    "min_quantity_t_per_month": 20,
+    "max_quantity_t_per_month": 800,
+    "processing_capability": [
+      "grading",
+      "mixing_plant",
+      "laying"
+    ],
+    "estimated_price_inr_per_tonne": 700,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Uses slag and plastic-modified mixes in pavement layers. Demo buyer."
+  },
+  {
+    "id": "rec_road_02",
+    "company_name": "Sriperumbudur Highway Aggregates",
+    "sector": "road_infrastructure",
+    "location": "Sriperumbudur, Chennai region",
+    "latitude": 12.968,
+    "longitude": 79.946,
+    "accepted_materials": [
+      "concrete_waste",
+      "brick_waste",
+      "bottom_ash",
+      "steel_slag"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 15,
+    "max_quantity_t_per_month": 500,
+    "processing_capability": [
+      "crushing",
+      "screening",
+      "haulage"
+    ],
+    "estimated_price_inr_per_tonne": 600,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Sub-base and embankment supplier. Demo buyer."
+  },
+  {
+    "id": "rec_fert_01",
+    "company_name": "Delta Bio-Fertilisers",
+    "sector": "fertiliser_company",
+    "location": "Chengalpattu, Chennai region",
+    "latitude": 12.6878,
+    "longitude": 79.98,
+    "accepted_materials": [
+      "phosphogypsum",
+      "gypsum_waste",
+      "lime_sludge",
+      "food_processing_waste"
+    ],
+    "accepted_categories": [
+      "chemical_process",
+      "construction_demolition",
+      "mineral_sludge",
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 8,
+    "max_quantity_t_per_month": 150,
+    "processing_capability": [
+      "granulation",
+      "blending",
+      "lab_testing"
+    ],
+    "estimated_price_inr_per_tonne": 900,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "high",
+    "notes": "Industrial handling only; tests for contaminants before use. Demo buyer."
+  },
+  {
+    "id": "rec_fert_02",
+    "company_name": "Kaveri Organics",
+    "sector": "fertiliser_company",
+    "location": "Tindivanam, Chennai region",
+    "latitude": 12.241,
+    "longitude": 79.653,
+    "accepted_materials": [
+      "food_processing_waste",
+      "green_waste",
+      "lime_sludge",
+      "marble_slurry"
+    ],
+    "accepted_categories": [
+      "mineral_sludge",
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 5,
+    "max_quantity_t_per_month": 100,
+    "processing_capability": [
+      "composting",
+      "screening",
+      "bagging"
+    ],
+    "estimated_price_inr_per_tonne": 700,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Organic input supplier for farms. Demo buyer."
+  },
+  {
+    "id": "rec_compost_01",
+    "company_name": "Perungudi Compost Yard",
+    "sector": "composting_facility",
+    "location": "Perungudi, Chennai region",
+    "latitude": 12.9714,
+    "longitude": 80.2414,
+    "accepted_materials": [
+      "food_processing_waste",
+      "green_waste",
+      "sawdust"
+    ],
+    "accepted_categories": [
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 2,
+    "max_quantity_t_per_month": 50,
+    "processing_capability": [
+      "windrow_composting",
+      "turning",
+      "screening"
+    ],
+    "estimated_price_inr_per_tonne": 400,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "City-scale composting. Demo buyer."
+  },
+  {
+    "id": "rec_compost_02",
+    "company_name": "GreenLoop Compost Co.",
+    "sector": "composting_facility",
+    "location": "Madhavaram, Chennai region",
+    "latitude": 13.1482,
+    "longitude": 80.2305,
+    "accepted_materials": [
+      "food_processing_waste",
+      "green_waste",
+      "textile_waste",
+      "sawdust"
+    ],
+    "accepted_categories": [
+      "organic_biomass",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 1,
+    "max_quantity_t_per_month": 30,
+    "processing_capability": [
+      "windrow_composting",
+      "in_vessel"
+    ],
+    "estimated_price_inr_per_tonne": 450,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Takes mixed organics from bulk generators. Demo buyer."
+  },
+  {
+    "id": "rec_biogas_01",
+    "company_name": "Anna Nagar Biogas Plant",
+    "sector": "biogas_plant",
+    "location": "Anna Nagar, Chennai region",
+    "latitude": 13.085,
+    "longitude": 80.2101,
+    "accepted_materials": [
+      "food_processing_waste",
+      "green_waste"
+    ],
+    "accepted_categories": [
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 3,
+    "max_quantity_t_per_month": 40,
+    "processing_capability": [
+      "anaerobic_digestion",
+      "gas_storage"
+    ],
+    "estimated_price_inr_per_tonne": 600,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Digestion plant feeding a captive generator. Demo buyer."
+  },
+  {
+    "id": "rec_plastic_01",
+    "company_name": "RePolymer Recyclers",
+    "sector": "plastic_recycler",
+    "location": "Ambattur, Chennai region",
+    "latitude": 13.0947,
+    "longitude": 80.1622,
+    "accepted_materials": [
+      "plastic_pet",
+      "plastic_mixed"
+    ],
+    "accepted_categories": [
+      "polymer"
+    ],
+    "min_quantity_t_per_month": 1,
+    "max_quantity_t_per_month": 45,
+    "processing_capability": [
+      "washing",
+      "sorting",
+      "flaking",
+      "pelletising"
+    ],
+    "estimated_price_inr_per_tonne": 20000,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "PET and polyolefin line. Demo buyer."
+  },
+  {
+    "id": "rec_plastic_02",
+    "company_name": "Chennai Polymer Reprocessing",
+    "sector": "plastic_recycler",
+    "location": "Poonamallee, Chennai region",
+    "latitude": 13.0459,
+    "longitude": 80.0949,
+    "accepted_materials": [
+      "plastic_pet",
+      "plastic_mixed",
+      "textile_waste"
+    ],
+    "accepted_categories": [
+      "polymer",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 4,
+    "max_quantity_t_per_month": 120,
+    "processing_capability": [
+      "washing",
+      "extrusion",
+      "pelletising"
+    ],
+    "estimated_price_inr_per_tonne": 18500,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "High-volume pellet producer. Demo buyer."
+  },
+  {
+    "id": "rec_paper_01",
+    "company_name": "Tamil Fibre & Paper Mills",
+    "sector": "paper_recycler",
+    "location": "Royapuram, Chennai region",
+    "latitude": 13.1083,
+    "longitude": 80.29,
+    "accepted_materials": [
+      "cardboard",
+      "paper_waste"
+    ],
+    "accepted_categories": [
+      "paper_fibre"
+    ],
+    "min_quantity_t_per_month": 3,
+    "max_quantity_t_per_month": 200,
+    "processing_capability": [
+      "pulping",
+      "de-inking",
+      "baling"
+    ],
+    "estimated_price_inr_per_tonne": 9200,
+    "reuse_type": "DIRECT_REUSE",
+    "safety_level": "low",
+    "notes": "Takes baled OCC and mixed paper. Demo buyer."
+  },
+  {
+    "id": "rec_paper_02",
+    "company_name": "EcoPack Board Mills",
+    "sector": "paper_recycler",
+    "location": "Thiruvottiyur, Chennai region",
+    "latitude": 13.1582,
+    "longitude": 80.3014,
+    "accepted_materials": [
+      "cardboard",
+      "paper_waste",
+      "sawdust"
+    ],
+    "accepted_categories": [
+      "organic_biomass",
+      "paper_fibre"
+    ],
+    "min_quantity_t_per_month": 1,
+    "max_quantity_t_per_month": 60,
+    "processing_capability": [
+      "pulping",
+      "board_forming"
+    ],
+    "estimated_price_inr_per_tonne": 8600,
+    "reuse_type": "DIRECT_REUSE",
+    "safety_level": "low",
+    "notes": "Board-grade producer. Demo buyer."
+  },
+  {
+    "id": "rec_pack_01",
+    "company_name": "CirclePack Solutions",
+    "sector": "packaging_company",
+    "location": "Padi, Chennai region",
+    "latitude": 13.0969,
+    "longitude": 80.1881,
+    "accepted_materials": [
+      "cardboard",
+      "paper_waste",
+      "plastic_pet"
+    ],
+    "accepted_categories": [
+      "paper_fibre",
+      "polymer"
+    ],
+    "min_quantity_t_per_month": 1,
+    "max_quantity_t_per_month": 35,
+    "processing_capability": [
+      "converting",
+      "die_cutting"
+    ],
+    "estimated_price_inr_per_tonne": 8000,
+    "reuse_type": "DIRECT_REUSE",
+    "safety_level": "low",
+    "notes": "Buys clean board for packaging conversion. Demo buyer."
+  },
+  {
+    "id": "rec_pack_02",
+    "company_name": "GreenWrap Packaging",
+    "sector": "packaging_company",
+    "location": "Porur, Chennai region",
+    "latitude": 13.0361,
+    "longitude": 80.1561,
+    "accepted_materials": [
+      "cardboard",
+      "paper_waste",
+      "textile_waste"
+    ],
+    "accepted_categories": [
+      "paper_fibre",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 0.5,
+    "max_quantity_t_per_month": 20,
+    "processing_capability": [
+      "converting",
+      "shredding"
+    ],
+    "estimated_price_inr_per_tonne": 7600,
+    "reuse_type": "DIRECT_REUSE",
+    "safety_level": "low",
+    "notes": "Small-batch converter, flexible minimums. Demo buyer."
+  },
+  {
+    "id": "rec_metal_01",
+    "company_name": "Chennai Metal Reclamation",
+    "sector": "metal_recycler",
+    "location": "Korukkupet, Chennai region",
+    "latitude": 13.114,
+    "longitude": 80.283,
+    "accepted_materials": [
+      "metal_scrap",
+      "aluminium_dross",
+      "ewaste",
+      "spent_catalyst"
+    ],
+    "accepted_categories": [
+      "chemical_process",
+      "electronic",
+      "metal",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 0.5,
+    "max_quantity_t_per_month": 300,
+    "processing_capability": [
+      "shredding",
+      "magnetic_separation",
+      "melting",
+      "licensed_handling"
+    ],
+    "estimated_price_inr_per_tonne": 27000,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "high",
+    "notes": "Licensed for hazardous and metal-bearing streams. Demo buyer."
+  },
+  {
+    "id": "rec_metal_02",
+    "company_name": "Coromandel Alloy Recovery",
+    "sector": "metal_recycler",
+    "location": "Ennore, Chennai region",
+    "latitude": 13.1601,
+    "longitude": 80.31,
+    "accepted_materials": [
+      "metal_scrap",
+      "aluminium_dross",
+      "spent_catalyst"
+    ],
+    "accepted_categories": [
+      "chemical_process",
+      "metal",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 2,
+    "max_quantity_t_per_month": 200,
+    "processing_capability": [
+      "melting",
+      "refining",
+      "licensed_handling"
+    ],
+    "estimated_price_inr_per_tonne": 25500,
+    "reuse_type": "INDUSTRIAL_ONLY",
+    "safety_level": "high",
+    "notes": "Secondary smelter. Industrial inputs only. Demo buyer."
+  },
+  {
+    "id": "rec_ewaste_01",
+    "company_name": "E-Cycle Recovery Hub",
+    "sector": "ewaste_processor",
+    "location": "Ambattur, Chennai region",
+    "latitude": 13.0947,
+    "longitude": 80.1622,
+    "accepted_materials": [
+      "ewaste",
+      "spent_catalyst"
+    ],
+    "accepted_categories": [
+      "chemical_process",
+      "electronic"
+    ],
+    "min_quantity_t_per_month": 0.2,
+    "max_quantity_t_per_month": 40,
+    "processing_capability": [
+      "dismantling",
+      "separation",
+      "licensed_handling"
+    ],
+    "estimated_price_inr_per_tonne": 58000,
+    "reuse_type": "INDUSTRIAL_ONLY",
+    "safety_level": "hazardous",
+    "notes": "Authorised e-waste recycler. Demo buyer."
+  },
+  {
+    "id": "rec_furn_01",
+    "company_name": "Timber Craft Furniture",
+    "sector": "furniture_manufacturer",
+    "location": "Padi, Chennai region",
+    "latitude": 13.0969,
+    "longitude": 80.1881,
+    "accepted_materials": [
+      "sawdust",
+      "wood_waste",
+      "textile_waste"
+    ],
+    "accepted_categories": [
+      "organic_biomass",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 0.5,
+    "max_quantity_t_per_month": 25,
+    "processing_capability": [
+      "drying",
+      "panel_press",
+      "upholstery"
+    ],
+    "estimated_price_inr_per_tonne": 2100,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Uses offcuts and board feedstock. Demo buyer."
+  },
+  {
+    "id": "rec_furn_02",
+    "company_name": "Chennai Panel & Board Co.",
+    "sector": "furniture_manufacturer",
+    "location": "Sriperumbudur, Chennai region",
+    "latitude": 12.968,
+    "longitude": 79.946,
+    "accepted_materials": [
+      "sawdust",
+      "wood_waste",
+      "textile_waste"
+    ],
+    "accepted_categories": [
+      "organic_biomass",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 5,
+    "max_quantity_t_per_month": 150,
+    "processing_capability": [
+      "drying",
+      "resin_mixing",
+      "panel_press"
+    ],
+    "estimated_price_inr_per_tonne": 2400,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Particle board producer. Demo buyer."
+  },
+  {
+    "id": "rec_glass_01",
+    "company_name": "Coromandel Glass Works",
+    "sector": "glass_manufacturing",
+    "location": "Kattupalli, Chennai region",
+    "latitude": 13.25,
+    "longitude": 80.32,
+    "accepted_materials": [
+      "glass_waste"
+    ],
+    "accepted_categories": [
+      "glass"
+    ],
+    "min_quantity_t_per_month": 5,
+    "max_quantity_t_per_month": 300,
+    "processing_capability": [
+      "colour_sorting",
+      "furnace",
+      "batching"
+    ],
+    "estimated_price_inr_per_tonne": 3100,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Container glass furnace taking sorted cullet. Demo buyer."
+  },
+  {
+    "id": "rec_ceramic_01",
+    "company_name": "Kanchipuram Ceramics",
+    "sector": "ceramic_tile_manufacturing",
+    "location": "Kanchipuram, Chennai region",
+    "latitude": 12.8352,
+    "longitude": 79.7036,
+    "accepted_materials": [
+      "marble_slurry",
+      "glass_waste",
+      "rice_husk_ash",
+      "fly_ash",
+      "foundry_sand"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "glass",
+      "metallurgical_slag",
+      "mineral_sludge",
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 2,
+    "max_quantity_t_per_month": 70,
+    "processing_capability": [
+      "milling",
+      "kiln",
+      "slip_preparation"
+    ],
+    "estimated_price_inr_per_tonne": 1200,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Uses mineral sludges in tile bodies. Demo buyer."
+  },
+  {
+    "id": "rec_adsorb_01",
+    "company_name": "AquaSorb Materials",
+    "sector": "adsorbent_manufacturer",
+    "location": "Oragadam, Chennai region",
+    "latitude": 12.79,
+    "longitude": 79.95,
+    "accepted_materials": [
+      "rice_husk_ash",
+      "fly_ash",
+      "sawdust"
+    ],
+    "accepted_categories": [
+      "coal_combustion_residue",
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 1,
+    "max_quantity_t_per_month": 30,
+    "processing_capability": [
+      "activation",
+      "grinding",
+      "quality_lab"
+    ],
+    "estimated_price_inr_per_tonne": 3800,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Makes activated adsorbents for water treatment. Demo buyer."
+  },
+  {
+    "id": "rec_energy_01",
+    "company_name": "Maraimalai Biomass Energy",
+    "sector": "energy_plant",
+    "location": "Maraimalai Nagar, Chennai region",
+    "latitude": 12.79,
+    "longitude": 80.01,
+    "accepted_materials": [
+      "sawdust",
+      "wood_waste",
+      "green_waste",
+      "plastic_mixed",
+      "food_processing_waste"
+    ],
+    "accepted_categories": [
+      "organic_biomass",
+      "polymer"
+    ],
+    "min_quantity_t_per_month": 8,
+    "max_quantity_t_per_month": 400,
+    "processing_capability": [
+      "boiler",
+      "shredding",
+      "emission_controls"
+    ],
+    "estimated_price_inr_per_tonne": 1600,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Co-fires biomass with emission controls. Demo buyer."
+  },
+  {
+    "id": "rec_wp_01",
+    "company_name": "Chennai Circular Waste Hub",
+    "sector": "waste_processor",
+    "location": "Perungalathur, Chennai region",
+    "latitude": 12.914,
+    "longitude": 80.098,
+    "accepted_materials": [
+      "concrete_waste",
+      "brick_waste",
+      "plastic_mixed",
+      "cardboard",
+      "paper_waste",
+      "glass_waste",
+      "textile_waste",
+      "metal_scrap",
+      "ewaste",
+      "sawdust",
+      "food_processing_waste",
+      "green_waste"
+    ],
+    "accepted_categories": [
+      "construction_demolition",
+      "electronic",
+      "glass",
+      "metal",
+      "organic_biomass",
+      "paper_fibre",
+      "polymer",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 0.5,
+    "max_quantity_t_per_month": 500,
+    "processing_capability": [
+      "sorting",
+      "baling",
+      "shredding",
+      "transfer_station"
+    ],
+    "estimated_price_inr_per_tonne": 1200,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "moderate",
+    "notes": "Multi-stream aggregation and pre-processing. Demo buyer."
+  },
+  {
+    "id": "rec_wp_02",
+    "company_name": "Tiruvottiyur Resource Recovery",
+    "sector": "waste_processor",
+    "location": "Thiruvottiyur, Chennai region",
+    "latitude": 13.1582,
+    "longitude": 80.3014,
+    "accepted_materials": [
+      "foundry_sand",
+      "bottom_ash",
+      "copper_slag",
+      "aluminium_dross",
+      "phosphogypsum",
+      "gypsum_waste",
+      "concrete_waste"
+    ],
+    "accepted_categories": [
+      "chemical_process",
+      "coal_combustion_residue",
+      "construction_demolition",
+      "metallurgical_slag"
+    ],
+    "min_quantity_t_per_month": 2,
+    "max_quantity_t_per_month": 250,
+    "processing_capability": [
+      "leach_testing",
+      "stabilisation",
+      "licensed_handling"
+    ],
+    "estimated_price_inr_per_tonne": 950,
+    "reuse_type": "INDUSTRIAL_ONLY",
+    "safety_level": "high",
+    "notes": "Handles industrial residues under licence. Demo buyer."
+  },
+  {
+    "id": "rec_farm_01",
+    "company_name": "Sri Balaji Farms",
+    "sector": "agriculture_farm",
+    "location": "Minjur, Chennai region",
+    "latitude": 13.28,
+    "longitude": 80.27,
+    "accepted_materials": [
+      "food_processing_waste",
+      "green_waste",
+      "rice_husk_ash",
+      "marble_slurry"
+    ],
+    "accepted_categories": [
+      "mineral_sludge",
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 1,
+    "max_quantity_t_per_month": 25,
+    "processing_capability": [
+      "field_application",
+      "composting_pit"
+    ],
+    "estimated_price_inr_per_tonne": 350,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Applies composted organics to field crops. Demo buyer."
+  },
+  {
+    "id": "rec_farm_02",
+    "company_name": "Puzhal Horticulture Collective",
+    "sector": "agriculture_farm",
+    "location": "Red Hills, Chennai region",
+    "latitude": 13.194,
+    "longitude": 80.18,
+    "accepted_materials": [
+      "green_waste",
+      "food_processing_waste",
+      "sawdust"
+    ],
+    "accepted_categories": [
+      "organic_biomass"
+    ],
+    "min_quantity_t_per_month": 0.5,
+    "max_quantity_t_per_month": 15,
+    "processing_capability": [
+      "composting_pit",
+      "mulching"
+    ],
+    "estimated_price_inr_per_tonne": 300,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Smallholder collective near Red Hills. Demo buyer."
+  },
+  {
+    "id": "rec_sme_01",
+    "company_name": "Velachery Artisan Collective",
+    "sector": "artisan_sme",
+    "location": "Velachery, Chennai region",
+    "latitude": 12.9789,
+    "longitude": 80.2209,
+    "accepted_materials": [
+      "textile_waste",
+      "sawdust",
+      "cardboard",
+      "glass_waste"
+    ],
+    "accepted_categories": [
+      "glass",
+      "organic_biomass",
+      "paper_fibre",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 0.2,
+    "max_quantity_t_per_month": 8,
+    "processing_capability": [
+      "hand_sorting",
+      "upcycling",
+      "small_batch"
+    ],
+    "estimated_price_inr_per_tonne": 4200,
+    "reuse_type": "REQUIRES_PROCESSING",
+    "safety_level": "low",
+    "notes": "Makes upcycled goods in small batches. Demo buyer."
+  },
+  {
+    "id": "rec_sme_02",
+    "company_name": "Adyar Eco Products",
+    "sector": "artisan_sme",
+    "location": "Adyar, Chennai region",
+    "latitude": 13.001,
+    "longitude": 80.256,
+    "accepted_materials": [
+      "paper_waste",
+      "cardboard",
+      "textile_waste",
+      "plastic_pet"
+    ],
+    "accepted_categories": [
+      "paper_fibre",
+      "polymer",
+      "textile"
+    ],
+    "min_quantity_t_per_month": 0.2,
+    "max_quantity_t_per_month": 6,
+    "processing_capability": [
+      "hand_sorting",
+      "upcycling"
+    ],
+    "estimated_price_inr_per_tonne": 3600,
+    "reuse_type": "DIRECT_REUSE",
+    "safety_level": "low",
+    "notes": "Stationery and crafts from clean dry waste. Demo buyer."
+  },
+  {
+    "id": "rec_comm_01",
+    "company_name": "Mylapore Zero-Waste Neighbourhood",
+    "sector": "community_programme",
+    "location": "Mylapore, Chennai region",
+    "latitude": 13.0336,
+    "longitude": 80.2706,
+    "accepted_materials": [
+      "cardboard",
+      "paper_waste",
+      "green_waste",
+      "food_processing_waste"
+    ],
+    "accepted_categories": [
+      "organic_biomass",
+      "paper_fibre"
+    ],
+    "min_quantity_t_per_month": 0.1,
+    "max_quantity_t_per_month": 5,
+    "processing_capability": [
+      "segregation",
+      "community_composting"
+    ],
+    "estimated_price_inr_per_tonne": 200,
+    "reuse_type": "DIRECT_REUSE",
+    "safety_level": "low",
+    "notes": "Neighbourhood segregation and composting group. Demo buyer."
+  },
+  {
+    "id": "rec_comm_02",
+    "company_name": "Besant Nagar Recycling Collective",
+    "sector": "community_programme",
+    "location": "Besant Nagar, Chennai region",
+    "latitude": 13.0,
+    "longitude": 80.265,
+    "accepted_materials": [
+      "cardboard",
+      "paper_waste",
+      "plastic_pet",
+      "glass_waste"
+    ],
+    "accepted_categories": [
+      "glass",
+      "paper_fibre",
+      "polymer"
+    ],
+    "min_quantity_t_per_month": 0.1,
+    "max_quantity_t_per_month": 4,
+    "processing_capability": [
+      "segregation",
+      "baling"
+    ],
+    "estimated_price_inr_per_tonne": 250,
+    "reuse_type": "DIRECT_REUSE",
+    "safety_level": "low",
+    "notes": "Collects and bales clean dry recyclables. Demo buyer."
+  }
+]
