@@ -390,6 +390,20 @@ where Ollama is actually listening (`curl http://localhost:11434/api/tags`).
 `qwen2.5:3b` on CPU takes roughly 10–30 s per call. Raise `OLLAMA_TIMEOUT_SECONDS` if you see fallback warnings on
 a slow machine, or use a smaller model.
 
+**Analyze fails with a 500 after about 30 s** / `Failed to proxy ... socket hang up` / `ECONNRESET` in the Next terminal
+This is a timeout mismatch, not a bug in the request. Next.js limits proxied requests to **30 s in development**
+(`next/dist/server/lib/router-utils/proxy-request.js` → `proxyTimeout || 30000`), so if the backend is still waiting on
+Ollama at 30 s, the proxy tears down the connection and the browser gets an opaque 500 — the backend itself logs
+nothing wrong. `next.config.mjs` raises this with `experimental.proxyTimeout` (default 120000 ms). Keep it above
+`OLLAMA_TIMEOUT_SECONDS`, or the failure comes back:
+
+```js
+experimental: { proxyTimeout: Number(process.env.PROXY_TIMEOUT_MS || 120000) }
+```
+
+Note this applies to `npm run dev`. A production `next start` does not proxy with that 30 s cap, but set the value
+anyway so dev and prod behave the same. `tests/test_analyze_latency.py` fails if the two settings drift apart again.
+
 **"Unidentified Material" for a description that looks obvious**
 The fallback classifier needs a keyword or composition marker from the knowledge base. Add the phrase to that
 material's `keywords` list in `backend/knowledge_base/materials.py`. With Ollama enabled this is far less common.

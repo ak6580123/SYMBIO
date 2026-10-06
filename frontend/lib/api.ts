@@ -51,6 +51,17 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     } catch {
       /* non-JSON error body */
     }
+
+    // A bare 500 with no JSON body means the Next dev proxy gave up on the
+    // upstream request (it logs "socket hang up / ECONNRESET"). Say so, and say
+    // what to change - an opaque 500 here is what made this hard to diagnose.
+    if (res.status >= 500 && detail === `Request failed (${res.status})`) {
+      detail =
+        'The request to the backend was cut off. Analysis waits on local Ollama, which can take ' +
+        'over a minute on CPU. Check the backend terminal is still running, and make sure ' +
+        'PROXY_TIMEOUT_MS in next.config.mjs is above OLLAMA_TIMEOUT_SECONDS.';
+    }
+
     throw new ApiError(res.status, detail);
   }
   return res.json() as Promise<T>;

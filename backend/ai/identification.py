@@ -33,15 +33,46 @@ from models.schemas import MaterialIdentification
 OLLAMA_URL = os.environ.get("OLLAMA_URL", "http://localhost:11434")
 OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:3b")
 OLLAMA_TIMEOUT = float(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "60"))
+# Cheap reachability probe. Keeps an unresponsive-but-listening Ollama from
+# burning the whole inference timeout before we fall back.
+OLLAMA_PROBE_TIMEOUT = float(os.environ.get("OLLAMA_PROBE_TIMEOUT_SECONDS", "2"))
 
 
 class OllamaUnavailable(Exception):
     pass
 
 
+class OllamaUnresponsive(OllamaUnavailable):
+    """Ollama accepted the connection but never answered the probe.
+
+    Kept distinct so the warning can name the real cause - a wedged or
+    overloaded server - rather than blaming the inference timeout.
+    """
+
+
 # ---------------------------------------------------------------------------
 # Ollama
 # ---------------------------------------------------------------------------
+
+
+def probe_ollama() -> None:
+    """Fail fast if Ollama is not answering.
+
+    Raises OllamaUnavailable immediately (within ~OLLAMA_PROBE_TIMEOUT seconds)
+    when the server is down or wedged, so the caller can fall back to the
+    deterministic classifier instead of blocking for the full inference
+    timeout - which is what previously left the browser proxy hanging.
+    """
+    try:
+        resp = httpx.get(f"{OLLAMA_URL}/api/tags", timeout=OLLAMA_PROBE_TIMEOUT)
+        resp.raise_for_status()
+    except httpx.TimeoutException as exc:
+        raise OllamaUnresponsive(
+            f"Ollama at {OLLAMA_URL} accepted the connection but did not respond "
+            f"within {OLLAMA_PROBE_TIMEOUT:g}s"
+        ) from exc
+    except httpx.HTTPError as exc:
+        raise OllamaUnavailable(f"Ollama not reachable at {OLLAMA_URL}: {exc}") from exc
 
 
 def ollama_status() -> dict:
@@ -229,6 +260,7 @@ def identify(
     warnings = warnings if warnings is not None else []
 
     try:
+        probe_ollama()
         raw = _extract_json(_call_ollama(description, composition, attached_text))
         ident = _ground(raw, engine=f"ollama:{OLLAMA_MODEL}")
         # Merge any composition the user typed but the model dropped.
@@ -236,12 +268,44 @@ def identify(
             ident.composition = fallback.parse_composition(composition or attached_text)
         return ident
     except (OllamaUnavailable, json.JSONDecodeError, ValidationError, KeyError, ValueError) as exc:
+        reason = _describe_failure(exc)
         warnings.append(
-            "Ollama was unavailable or returned an unusable answer, so Symbio used its built-in "
-            "deterministic classifier. Enable Ollama for richer identification."
+            f"{reason} Symbio used its built-in deterministic classifier instead, so this "
+            "result is still valid - just less flexible about unusual wording."
         )
         ident = MaterialIdentification(**fallback.classify(description, composition, attached_text))
         if not ident.composition:
             ident.composition = fallback.parse_composition(composition or attached_text)
         ident.reasoning = f"{ident.reasoning} (fallback: {exc.__class__.__name__})"
         return ident
+
+
+def _describe_failure(exc: Exception) -> str:
+    """Turn an exception into a sentence a user can act on.
+
+    An unexplained 500 or a silent fallback is worse than either a slow answer
+    or a clear message, so name the cause and the fix.
+    """
+    # Check the subclass first - it needs a different remedy.
+    if isinstance(exc, OllamaUnresponsive):
+        return (
+            f"Ollama at {OLLAMA_URL} accepted the connection but did not respond within "
+            f"{OLLAMA_PROBE_TIMEOUT:g}s. It is likely still loading {OLLAMA_MODEL}, or is "
+            "busy with another request - try again, or raise OLLAMA_PROBE_TIMEOUT_SECONDS."
+        )
+    if isinstance(exc, OllamaUnavailable):
+        detail = str(exc).lower()
+        if "timed out" in detail or "timeout" in detail:
+            return (
+                f"Ollama did not answer within {OLLAMA_TIMEOUT:g}s ({OLLAMA_MODEL}). "
+                "Raise OLLAMA_TIMEOUT_SECONDS if your machine is slow, or use a smaller model."
+            )
+        return (
+            f"Ollama is not reachable at {OLLAMA_URL}. Start it with `ollama serve` and make sure "
+            f"`ollama pull {OLLAMA_MODEL}` has been run."
+        )
+    if isinstance(exc, json.JSONDecodeError):
+        return "Ollama returned text that was not valid JSON."
+    if isinstance(exc, ValidationError):
+        return "Ollama returned a response that did not match the expected schema."
+    return "Ollama returned an unusable answer."
