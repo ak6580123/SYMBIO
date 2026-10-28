@@ -17,6 +17,15 @@ dist/
 # Environment
 .env
 .env.local
+
+# A development database is tenant data, never source. The default path is outside the
+# repository (~/.local/share/symbio), so this only catches a SYMBIO_SQLITE_PATH that was
+# pointed into the tree - and the WAL files that come with it.
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
 .env*.local
 
 # Editors / OS

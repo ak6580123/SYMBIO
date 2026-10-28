@@ -17,16 +17,23 @@ import {
 } from 'recharts';
 
 import { inr } from '@/lib/format';
+import {
+  AXIS_TEXT,
+  GRID,
+  HOVER_BAND,
+  SERIES,
+  SLATE_DEEP,
+  TEAL_STRONG,
+  TOOLTIP_STYLE as PALETTE_TOOLTIP,
+} from '@/lib/palette';
 
-export const CHART_COLORS = ['#34D399', '#38BDF8', '#A3E635', '#FCD34D', '#F472B6', '#818CF8', '#FB923C', '#94A3B8'];
+// Every colour below comes from lib/palette.ts: that is what keeps a chart on the
+// same five colours as the rest of the app.
+export const CHART_COLORS = [...SERIES];
 
-const AXIS = { fill: '#64748B', fontSize: 10 };
-const TOOLTIP_STYLE = {
-  background: '#10161D',
-  border: '1px solid #2B3846',
-  borderRadius: 6,
-  fontSize: 11,
-} as const;
+const AXIS = { fill: AXIS_TEXT, fontSize: 10 };
+const TOOLTIP_STYLE = { ...PALETTE_TOOLTIP, fontSize: 11 } as const;
+const CURSOR = { fill: HOVER_BAND };
 
 export function CategoryBarChart({
   data,
@@ -37,11 +44,11 @@ export function CategoryBarChart({
     <div className="h-56">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 4, right: 8, bottom: 4, left: -18 }}>
-          <CartesianGrid stroke="#1E2833" vertical={false} />
+          <CartesianGrid stroke={GRID} vertical={false} />
           <XAxis dataKey="name" tick={AXIS} interval={0} angle={-18} height={54} />
           <YAxis tick={AXIS} />
           <Tooltip
-            cursor={{ fill: 'rgba(52,211,153,0.06)' }}
+            cursor={CURSOR}
             contentStyle={TOOLTIP_STYLE}
             formatter={(value, name) => [
               name === 'tonnes' ? `${value} t/mo` : inr(Number(value)),
@@ -73,15 +80,15 @@ export function SectorBarChart({
     <div className="h-64">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={rows} layout="vertical" margin={{ top: 4, right: 16, bottom: 4, left: 8 }}>
-          <CartesianGrid stroke="#1E2833" horizontal={false} />
+          <CartesianGrid stroke={GRID} horizontal={false} />
           <XAxis type="number" tick={AXIS} />
           <YAxis type="category" dataKey="label" tick={AXIS} width={140} />
           <Tooltip
-            cursor={{ fill: 'rgba(52,211,153,0.06)' }}
+            cursor={CURSOR}
             contentStyle={TOOLTIP_STYLE}
             formatter={(value) => [`${value} ${unit}`, dataKey]}
           />
-          <Bar dataKey={dataKey} fill="#34D399" fillOpacity={0.8} radius={[0, 3, 3, 0]} />
+          <Bar dataKey={dataKey} fill={TEAL_STRONG} fillOpacity={0.8} radius={[0, 3, 3, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>
@@ -97,13 +104,13 @@ export function SourceStackedChart({
     <div className="h-64">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} margin={{ top: 4, right: 16, bottom: 4, left: -18 }}>
-          <CartesianGrid stroke="#1E2833" vertical={false} />
+          <CartesianGrid stroke={GRID} vertical={false} />
           <XAxis dataKey="label" tick={AXIS} interval={0} height={40} />
           <YAxis tick={AXIS} />
-          <Tooltip cursor={{ fill: 'rgba(52,211,153,0.06)' }} contentStyle={TOOLTIP_STYLE} />
-          <Legend wrapperStyle={{ fontSize: 11, color: '#94A3B8' }} />
-          <Bar dataKey="analysed_t" name="Analysed (t/mo)" fill="#3D4C5C" radius={[3, 3, 0, 0]} />
-          <Bar dataKey="diverted_t" name="Diverted (t/mo)" fill="#34D399" radius={[3, 3, 0, 0]} />
+          <Tooltip cursor={CURSOR} contentStyle={TOOLTIP_STYLE} />
+          <Legend wrapperStyle={{ fontSize: 11, color: AXIS_TEXT }} />
+          <Bar dataKey="analysed_t" name="Analysed (t/mo)" fill={SLATE_DEEP} radius={[3, 3, 0, 0]} />
+          <Bar dataKey="diverted_t" name="Diverted (t/mo)" fill={TEAL_STRONG} radius={[3, 3, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

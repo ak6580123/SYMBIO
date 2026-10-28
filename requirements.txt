@@ -1,9 +1,12 @@
 # Symbio backend dependencies.
 # Install with:  pip install -r requirements.txt
 #
-# Only what the backend actually imports - no ORM, no database driver. The MVP
-# keeps analyses in process memory (see backend/services/storage.py), which is
-# the single place to swap for Supabase/Postgres later.
+# Only what the backend actually imports, and nothing it could do without. No ORM:
+# `backend/db/` is a thin hand-written layer over SQL (see `db/engine.py`), and the
+# seed knowledge base stays in JSON because it ships with the code.
+#
+# Accounts are real, so the password hasher is a hard requirement - the identity
+# service refuses to start without it rather than storing anything weaker.
 fastapi==0.115.14
 uvicorn[standard]==0.32.1
 pydantic==2.13.5
@@ -11,6 +14,12 @@ httpx==0.28.1
 python-multipart==0.0.32
 pypdf==6.19.0
 python-docx==1.2.0
+argon2-cffi==25.1.0
+
+# Only needed to run against PostgreSQL. Without it the same code uses the local
+# SQLite file, which is why this is optional and `db/engine.py` imports it lazily.
+#   pip install "psycopg[binary]"
+# psycopg[binary]==3.2.13
 
 # Optional: better PDF text extraction on real-world reports.
 # Skipped by default because it is a ~25 MB binary wheel and pypdf already

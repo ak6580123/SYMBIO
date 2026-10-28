@@ -82,7 +82,7 @@ export default function FileDrop({
         ) : (
           <>
             <p className="text-xs font-medium text-slate-300">Drop a waste or material report</p>
-            <p className="mt-1 text-[11px] text-slate-600">PDF, TXT or DOCX · optional · text is sent to the classifier</p>
+            <p className="mt-1 text-[11px] text-slate-600">PDF, TXT or DOCX · optional · you check the extracted fields before analyzing</p>
           </>
         )}
       </div>

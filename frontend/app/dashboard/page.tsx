@@ -1,10 +1,18 @@
 import Link from 'next/link';
 import { CategoryBarChart } from '@/components/Charts';
-import FlowDiagram, { type FlowLink } from '@/components/FlowDiagram';
-import { DemoTag, Empty, Metric, Notice, Panel, ScoreRing } from '@/components/ui';
+import DemandHeatmap from '@/components/DemandHeatmap';
+import FlowDiagram from '@/components/FlowDiagram';
+import MaterialFlow from '@/components/MaterialFlow';
+import RoleWorkflows from '@/components/Roles';
+import { Empty, ErrorState, MetricStrip, PageHeader, Panel, ScoreRing, Section, SymbioButton } from '@/components/ui';
 import { api } from '@/lib/api';
-import { inr, relativeTime, SOURCE_SECTOR_LABEL } from '@/lib/format';
-import type { DashboardData } from '@/lib/types';
+import {
+  inr,
+  relativeTime,
+  SOURCE_SECTOR_LABEL,
+  distanceShort,
+ } from '@/lib/format';
+import type { DashboardData, DemandResponse, ListingStats, MaterialFlowResponse } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,31 +25,35 @@ export default async function DashboardPage() {
     error = err instanceof Error ? err.message : 'Backend unreachable';
   }
 
+  // §4 / §9 / §10 ride along on the same page. Each is fetched independently and
+  // rendered only if it answered: a missing funnel should not blank the dashboard.
+  let listings: ListingStats | null = null;
+  let demand: DemandResponse | null = null;
+  let flow: MaterialFlowResponse | null = null;
+  try {
+    [listings, demand, flow] = await Promise.all([
+      api.listings({}).then((payload) => payload.stats),
+      api.demand({ limit: 6 }),
+      api.materialFlow(),
+    ]);
+  } catch {
+    /* the sections below check for null */
+  }
+
   if (error || !data) {
     return (
-      <div className="space-y-4">
-        <h1 className="text-xl font-semibold tracking-tight text-slate-100">Dashboard</h1>
-        <Notice tone="danger">
-          {error}
-          <br />
-          <span className="text-slate-400">Start the FastAPI backend on port 8000, then reload.</span>
-        </Notice>
+      <div className="space-y-6">
+        <PageHeader eyebrow="Overview" title="Network overview" />
+        <ErrorState
+          title="Something went wrong while loading the overview."
+          hint={error ?? 'The figures on this page are read from the analysis service, which is not answering.'}
+          retryHref="/dashboard"
+        />
       </div>
     );
   }
 
   const impact = data.impact;
-
-  // Build the flow ribbons from the per-analysis allocated routes.
-  const flowLinks: FlowLink[] = [];
-  for (const analysis of data.recent_analyses) {
-    if (!analysis.top_match || analysis.allocated_t_per_month <= 0) continue;
-    flowLinks.push({
-      material: analysis.material,
-      sector: analysis.top_match.sector,
-      tonnes: analysis.allocated_t_per_month,
-    });
-  }
 
   const categoryData = data.waste_categories.map((category) => ({
     name: category.label.length > 22 ? `${category.label.slice(0, 20)}…` : category.label,
@@ -51,50 +63,59 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-5">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-slate-100">Dashboard</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Everything Symbio has analyzed in this session, and what it found.
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <DemoTag />
-          <Link href="/analyze" className="btn-primary">
-            Analyze New Waste
-          </Link>
-        </div>
-      </header>
+      <PageHeader
+        eyebrow="Overview"
+        title="Network overview"
+        subtitle="What has been put into Symbio, what the network could take, and what actually found a route."
+        actions={<SymbioButton href="/analyze">Analyze a material</SymbioButton>}
+      />
 
-      {/* Metrics */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-        <Metric label="Total waste analyzed" value={`${impact.tonnes_analysed} t/mo`} hint={`${impact.analyses} analyses`} />
-        <Metric
-          label="Potential waste diverted"
-          value={`${impact.tonnes_diverted} t/mo`}
-          hint={`${(impact.diversion_rate * 100).toFixed(0)}% of analyzed volume`}
-          accent
-        />
-        <Metric label="Potential matches" value={String(impact.potential_matches)} hint={`${impact.viable_matches} with allocated volume`} />
-        <Metric label="Est. economic value" value={inr(impact.estimated_value_inr_per_month)} hint="per month · demo" />
-        <Metric
-          label="Est. CO₂e reduction"
-          value={`${impact.estimated_co2e_t_per_month} t/mo`}
-          hint={`${(impact.estimated_co2e_t_per_month * 12).toFixed(1)} t/year · demo`}
-          accent
-        />
-      </div>
+      <MetricStrip
+        items={[
+          { label: 'Stream analysed', value: `${impact.tonnes_analysed} t/mo`, hint: `${impact.analyses} analyses` },
+          {
+            label: 'Diverted through a match',
+            value: `${impact.tonnes_diverted} t/mo`,
+            hint: `${(impact.diversion_rate * 100).toFixed(0)}% of analysed volume`,
+            tone: 'success',
+          },
+          {
+            label: 'Matches',
+            value: String(impact.potential_matches),
+            hint: `${impact.viable_matches} with allocated volume`,
+          },
+          {
+            label: 'Est. economic value',
+            value: `${inr(impact.estimated_value_inr_per_month)}/mo`,
+            hint: 'from recorded prices',
+          },
+          {
+            label: 'Est. CO₂e avoided',
+            value: `${impact.estimated_co2e_t_per_month} t/mo`,
+            hint: `${(impact.estimated_co2e_t_per_month * 12).toFixed(1)} t/year`,
+            tone: 'accent',
+          },
+        ]}
+      />
+
+      {listings && demand && flow && (
+        <RoleWorkflows impact={data.impact} stats={listings} demand={demand} flow={flow} />
+      )}
 
       <div className="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
         {/* Recent analyses */}
-        <Panel
-          title="Recent waste analyses"
+        <Section
+          title="Analysed streams"
+          subtitle={`${data.recent_analyses.length} most recent`}
           action={
-            <span className="text-[11px] text-slate-500">{data.recent_analyses.length} most recent</span>
+            <Link href="/analyze" className="text-[11px] link">
+              Analyze a material
+            </Link>
           }
+          divided
         >
           {data.recent_analyses.length === 0 ? (
-            <Empty title="No analyses yet" hint="Run your first analysis to populate the dashboard." />
+            <Empty title="No material has been analysed yet" hint="Describe one stream and Symbio will rank who can take it." />
           ) : (
             <div className="-mx-4 overflow-x-auto">
               <table className="w-full min-w-[640px] text-left text-xs">
@@ -115,9 +136,7 @@ export default async function DashboardPage() {
                       <td className="px-4 py-2.5">
                         <div className="flex items-center gap-2">
                           <span className="font-medium text-slate-200">{row.material}</span>
-                          {row.seeded && (
-                            <span className="chip border-ink-600 bg-ink-800 text-[9px] text-slate-500">seeded</span>
-                          )}
+
                         </div>
                         <span className="text-[10px] text-slate-600">
                           {(row.confidence * 100).toFixed(0)}% confidence · {relativeTime(row.created_at)}
@@ -141,7 +160,7 @@ export default async function DashboardPage() {
                         {row.top_match ? (
                           <Link
                             href={`/matches/${row.top_match.match_id}`}
-                            className="text-slate-300 hover:text-accent"
+                            className="text-slate-300 hover:text-brand-strong"
                             title={row.top_match.company_name}
                           >
                             {row.top_match.score.toFixed(0)}% · {row.top_match.sector_label}
@@ -156,49 +175,70 @@ export default async function DashboardPage() {
               </table>
             </div>
           )}
-        </Panel>
+        </Section>
 
         {/* Circular flow */}
-        <Panel title="Circular flow" action={<span className="text-[11px] text-slate-500">allocated tonnes</span>}>
-          <FlowDiagram links={flowLinks} />
+        <Panel title="Where the tonnage goes" subtitle="Each route, from the source that made it to the product it became.">
+          <FlowDiagram rows={data.flow_rows} />
           <Link href="/map" className="btn-ghost mt-4 w-full text-xs">
             Open network map
           </Link>
         </Panel>
       </div>
 
+      {flow && (
+        <Section
+          title="Material flow"
+          subtitle="Every tonnage that entered Symbio, stage by stage to the one a partner took in."
+          action={
+            <span className="text-[11px] text-text-faint">
+              {data.flow_rows.length} of {data.flow_routes_potential} routes carry tonnage
+            </span>
+          }
+          divided
+        >
+          <MaterialFlow flow={flow} />
+        </Section>
+      )}
+
+      {demand && (
+        <Section
+          title="Where demand is strongest"
+          subtitle="Regional demand potential by area: the capacity that exists nearby, not a prediction about any one company."
+          divided
+        >
+          <DemandHeatmap data={demand} />
+        </Section>
+      )}
+
       <div className="grid gap-5 lg:grid-cols-[1fr_1fr]">
         {/* Top matches */}
-        <Panel
-          title="Top matches"
+        <Section
+          title="Strongest matches"
           action={
-            <Link href="/matches" className="text-[11px] text-accent hover:underline">
-              all matches
+            <Link href="/matches" className="text-[11px] link">
+              All matches
             </Link>
           }
+          divided
         >
           {data.top_matches.length === 0 ? (
-            <Empty title="No matches yet" />
+            <Empty title="No compatible demand found yet" hint="A match appears as soon as a stream and a partner line up." />
           ) : (
-            <ul className="space-y-2">
+            <ul className="divide-y divide-line">
               {data.top_matches.map((match) => (
                 <li key={match.id}>
-                  <Link
-                    href={`/matches/${match.id}`}
-                    className="flex items-center gap-3 rounded-md border border-ink-700 bg-ink-900 p-2.5 transition-colors hover:border-ink-600"
-                  >
+                  <Link href={`/matches/${match.id}`} className="-mx-2 flex items-center gap-3 rounded-card px-2 py-2 hover:bg-surface-inset">
                     <ScoreRing score={match.score} size={48} />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-xs font-medium text-slate-200">{match.company_name}</p>
                       <p className="truncate text-[10px] text-slate-500">
-                        {match.material} → {match.sector_label} · {match.distance_km} km
+                        {match.material} → {match.sector_label} · {distanceShort(match.distance_km)}
                       </p>
                     </div>
                     <div className="shrink-0 text-right">
-                      <p className="text-[11px] tabular-nums text-accent">
-                        {inr(match.estimated_value_inr_per_month)}
-                      </p>
-                      <p className="text-[10px] tabular-nums text-slate-600">
+                      <p className="text-[11px] tabular-nums text-text-strong">{inr(match.estimated_value_inr_per_month)}</p>
+                      <p className="text-[10px] tabular-nums text-text-faint">
                         {match.estimated_co2e_t_per_month} t CO₂e
                       </p>
                     </div>
@@ -207,20 +247,24 @@ export default async function DashboardPage() {
               ))}
             </ul>
           )}
-        </Panel>
+        </Section>
 
         {/* Categories */}
-        <Panel title="Waste categories" action={<span className="text-[11px] text-slate-500">tonnes / month</span>}>
+        <Section title="Material categories" subtitle="Tonnes per month, grouped by the category the knowledge base filed them in." divided>
           {categoryData.length === 0 ? (
-            <Empty title="No categories yet" />
+            <Empty title="No categories yet" hint="Categories appear once a stream has been identified." />
           ) : (
             <CategoryBarChart data={categoryData} />
           )}
-        </Panel>
+        </Section>
       </div>
 
       {/* Impact summary */}
-      <Panel title="Impact summary" action={<span className="text-[11px] text-slate-500">{impact.label}</span>}>
+      <Section
+        title="What it added up to"
+        subtitle={impact.label}
+        divided
+      >
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <ImpactRow
             label="Volume diverted"
@@ -247,31 +291,29 @@ export default async function DashboardPage() {
             caption="matches with allocated volume vs total opportunities"
           />
         </div>
-        <p className="mt-4 border-t border-ink-700 pt-3 text-[11px] leading-relaxed text-slate-600">
-          Estimated impact — demo calculation. Figures come from the seeded price and emission factors in the
-          knowledge base and are not certified values.{' '}
-          <Link href="/impact" className="text-accent hover:underline">
+        <p className="caption mt-1">
+          Every figure above is computed from the recorded price and emission factor it names - an estimate for
+          comparing options, not a certified value.{' '}
+          <Link href="/impact" className="link">
             See the formulas
           </Link>
           .
         </p>
-      </Panel>
+      </Section>
 
       {/* Quick action */}
-      <section className="panel flex flex-wrap items-center justify-between gap-4 p-5">
+      <section className="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         <div>
-          <p className="text-sm font-medium text-slate-200">Have another stream to test?</p>
-          <p className="mt-0.5 text-xs text-slate-500">
-            Industry, household, SME or agricultural residue — the same pipeline handles all of them.
+          <p className="text-[15px] font-semibold text-text-strong">Another stream to look at?</p>
+          <p className="mt-0.5 text-[12.5px] text-text-muted">
+            Industrial, household, SME or agricultural residue - the same pipeline, the same rules.
           </p>
         </div>
         <div className="flex gap-2">
-          <Link href="/analyze" className="btn-primary">
-            Analyze New Waste
-          </Link>
-          <Link href="/knowledge-base" className="btn-ghost">
+          <SymbioButton href="/analyze">Analyze a material</SymbioButton>
+          <SymbioButton href="/knowledge-base" variant="ghost">
             Browse materials
-          </Link>
+          </SymbioButton>
         </div>
       </section>
     </div>

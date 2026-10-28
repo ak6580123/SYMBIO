@@ -394,8 +394,34 @@ MATERIALS: list[dict[str, Any]] = [
         "default_reuse_type": "DIRECT_REUSE",
         "typical_price_inr_per_tonne": 3500.0,
         "co2e_avoided_t_per_tonne": 0.28,
-        "keywords": ["rice husk ash", "rha", "husk ash", "paddy husk"],
+        "keywords": ["rice husk ash", "rha", "husk ash", "paddy husk ash"],
         "notes": "High reactive silica when burnt under controlled conditions.",
+    },
+    {
+        # Raw husk is a different material from its ash: different uses, different
+        # buyers, and no claim that it can replace cement. It sits next to the ash
+        # entry on purpose so the two stay honest against each other.
+        "id": "rice_husk",
+        "name": "Rice Husk",
+        "category": "organic_biomass",
+        "aliases": ["paddy husk", "rice hull", "paddy hull"],
+        "description": "The hard outer hull removed at rice mills; bulky, slow to rot and rich in silica.",
+        "properties": ["lignocellulosic", "high_silica", "bulky_low_density", "burns_readily"],
+        "reuse_categories": ["panel_and_board_making", "energy_recovery", "compost_feedstock", "soil_amendment"],
+        "compatible_sectors": [
+            "furniture_manufacturer",
+            "energy_plant",
+            "composting_facility",
+            "agriculture_farm",
+            "artisan_sme",
+        ],
+        "safety_level": "low",
+        "requires_processing": True,
+        "default_reuse_type": "REQUIRES_PROCESSING",
+        "typical_price_inr_per_tonne": 1100.0,
+        "co2e_avoided_t_per_tonne": 0.35,
+        "keywords": ["rice husk", "paddy husk", "rice hull", "paddy hull", "husk from rice mill"],
+        "notes": "Board filler, boiler fuel and mulch. Burn it only where the ash is wanted - the husk itself is not a cement additive.",
     },
     {
         "id": "food_processing_waste",

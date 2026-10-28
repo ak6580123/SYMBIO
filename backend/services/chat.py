@@ -21,15 +21,17 @@ from typing import Any
 
 from ai.identification import OLLAMA_URL, active_model
 from knowledge_base import loader
-from matching.engine import REUSE_END_USE, SECTOR_LABELS
+from matching.engine import REUSE_END_USE, SAFETY_RANK, SECTOR_LABELS
+from models.schemas import plain
 from services import analysis as analysis_service
 
 NO_INFO = "I don't have enough information to determine that."
 
 CAN_ANSWER = (
     "I can answer questions about this analysis: what the material is, which sectors could use it, "
-    "why a specific recipient was recommended, whether processing is required, and the estimated "
-    "impact figures (labelled as demo calculations)."
+    "why a specific recipient was recommended, whether processing is required, which option is "
+    "safest, which route avoids the most CO2e, and the estimated impact figures (labelled as demo "
+    "calculations)."
 )
 
 
@@ -41,7 +43,13 @@ CAN_ANSWER = (
 # a bare "what is" used to catch anything containing those words, so genuinely
 # out-of-scope questions got an answer instead of an honest "I don't know".
 INTENTS = [
-    ("match_reason", r"\b(why|reason|reasons|how did|explain|ranking)\b.*\b(match|matches|recommend|recommended|chosen|winner|top|score|scores)\b"),
+    # "ranked first" is how people actually ask this, so it has to be in the
+    # pattern - matching only "ranking" sent it to the refusal branch.
+    ("match_reason", r"\b(why|reason|reasons|how did|explain|ranking|ranked?)\b.*\b(match|matches|recommend|recommended|chosen|winner|top|score|scores|rank|first|best)\b"),
+    # Before processing/impact/material: "safest handling" and "highest
+    # environmental benefit" both contain words those broader patterns catch.
+    ("safest", r"\b(safe|safest|safety|risk|riskiest|caution|cautious)\b"),
+    ("environmental_ranking", r"\b(highest|best|most|biggest|largest|greatest|maximum)\b[^?]*\b(environmental|environment|co2e?|carbon|benefit|impact)\b"),
     ("processing", r"\b(process|processing|processed|treatment|treat|treated|handling|handle)\b"),
     ("impact", r"\b(impact|co2|co2e|carbon|emission|emissions|environment|environmental|value|money|worth|price|savings|divert|diverted)\b"),
     ("reuse_options", r"\b(reuse|re-use|application|applications|do with|useful|purpose|what can)\b"),
@@ -53,10 +61,10 @@ INTENTS = [
 def _detect_intent(question: str, match_id: str | None) -> str:
     q = question.lower()
 
-    # "Why was X recommended?" is the single most common question on a match
-    # page, and "company"/"sector" in it would otherwise match the sectors
-    # pattern first. Give it outright priority.
-    if re.search(r"\b(why|reason|explain)\b", q) and re.search(r"\brecommend", q):
+    # "Why was X recommended / ranked first?" is the single most common question
+    # on a match page, and "company"/"recipient"/"sector" in it would otherwise
+    # be caught by the broader patterns. Give it outright priority.
+    if re.search(r"\b(why|reason|explain)\b", q) and re.search(r"\b(recommend\w*|rank\w*|first|top|winner)\b", q):
         return "match_reason"
 
     if match_id and re.search(r"\b(why|reason|explain|score)\b", q):
@@ -75,6 +83,21 @@ def _detect_intent(question: str, match_id: str | None) -> str:
 
 def _sector_label(sector: str) -> str:
     return SECTOR_LABELS.get(sector, sector.replace("_", " ").title())
+
+
+# `_plain` is the schemas helper: enum fields must never appear as
+# 'SafetyLevel.moderate' inside a sentence.
+_plain = plain
+
+
+def _plain_text(text: str) -> str:
+    """Answers are displayed as plain text, so markdown markers are removed here
+    instead of pulling a renderer into the frontend. Emphasis and heading markers
+    only - bullets and line breaks are what makes a list readable, so they stay.
+    """
+    text = re.sub(r"^#{1,4}\s*", "", text, flags=re.M)
+    text = re.sub(r"\*\*(.+?)\*\*|__(.+?)__", lambda m: m.group(1) or m.group(2), text)
+    return text.replace("`", "").strip()
 
 
 def _fmt(value: float) -> str:
@@ -105,6 +128,63 @@ def _recipient_from_question(analysis: dict, question: str, match_id: str | None
 # ---------------------------------------------------------------------------
 # Deterministic, grounded answers
 # ---------------------------------------------------------------------------
+
+
+def _answer_safest(analysis: dict) -> str:
+    """Rank routes by the safety layer's own classification, never by opinion.
+
+    The order comes from the level the knowledge base assigned and the routing
+    decision the gate made, so the assistant cannot talk its way into calling a
+    hazardous stream safe.
+    """
+    matches = analysis["matches"]
+    if not matches:
+        return (
+            f"No reuse route passed the safety layer for {analysis['material']['name']}, so there is "
+            "nothing to rank by safety."
+        )
+    ranked = sorted(matches, key=lambda m: (SAFETY_RANK.get(m["safety_level"], 9), -m["overall_score"]))
+    lines = [
+        f"- {m['recipient']['company_name']} ({_sector_label(m['recipient']['sector'])}) — "
+        f"{_plain(m['safety_level'])} risk, {_plain(m['reuse_type']).replace('_', ' ').lower()}"
+        for m in ranked[:5]
+    ]
+    direct = [m for m in matches if m["reuse_type"] == "DIRECT_REUSE"]
+    lead = (
+        f"{len(direct)} of {len(matches)} routes can be used without further processing"
+        if direct
+        else f"all {len(matches)} routes carry processing or handling conditions"
+    )
+    return (
+        f"Safest reuse options for **{analysis['material']['name']}**, ranked by knowledge-base safety "
+        f"level and the routing decision ({lead}):\n"
+        + "\n".join(lines)
+        + "\n\nThese are demo classifications. They do not replace a site-specific risk assessment "
+        "or the handling instructions of the receiving plant."
+    )
+
+
+def _answer_environmental_ranking(analysis: dict) -> str:
+    """Which route avoids the most CO2e, from the figures the engine computed."""
+    matches = analysis["matches"]
+    if not matches:
+        return "No reuse route was scored for this stream, so there is no environmental benefit to rank."
+    ranked = sorted(matches, key=lambda m: (-m["estimated_co2e_t_per_month"], -m["overall_score"]))
+    best = ranked[0]
+    lines = "\n".join(
+        f"- {m['recipient']['company_name']} — {m['estimated_co2e_t_per_month']} t CO₂e/mo, with "
+        f"{m['allocated_t_per_month']} t/mo allocated to this route"
+        for m in ranked[:5]
+    )
+    return (
+        f"Highest estimated environmental benefit: **{best['recipient']['company_name']}** at "
+        f"{best['estimated_co2e_t_per_month']} t CO₂e/month, via "
+        f"{' → '.join(best['reuse_pathway']['steps'])}.\n\n{lines}\n\n"
+        "Estimated impact — demo calculation: avoided CO₂e = routed tonnes × the knowledge-base "
+        f"avoidance factor ({analysis['totals']['co2e_factor_used_t_per_tonne']} t per tonne). Each "
+        "route above is priced as if it took the matched quantity on its own; the totals then share "
+        "the single stream out, so the route figures do not add up."
+    )
 
 
 def _answer_material(analysis: dict) -> str:
@@ -191,9 +271,13 @@ def _answer_impact(analysis: dict) -> str:
         f"(factor {t['co2e_factor_used_t_per_tonne']} t CO2e per tonne)",
     ]
     if top:
-        lines.append(
-            f"- Best route: {top['recipient']['company_name']} at {top['overall_score']:.0f}% match, "
+        haul = (
             f"{top['distance_km']:g} km away"
+            if top.get("distance_km") is not None
+            else "at a distance Symbio could not calculate"
+        )
+        lines.append(
+            f"- Best route: {top['recipient']['company_name']} at {top['overall_score']:.0f}% match, {haul}"
         )
     return "\n".join(lines)
 
@@ -294,6 +378,12 @@ def answer(analysis: dict, question: str, match_id: str | None = None) -> dict[s
     elif intent == "sectors":
         text = _answer_sectors(analysis)
         grounded = ["material.compatible_sectors", "match.recipient"]
+    elif intent == "safest":
+        text = _answer_safest(analysis)
+        grounded = ["match.safety_level", "match.reuse_type", "material.safety_level"]
+    elif intent == "environmental_ranking":
+        text = _answer_environmental_ranking(analysis)
+        grounded = ["match.estimated_co2e_t_per_month", "match.reuse_pathway", "analysis.totals"]
     elif intent == "impact":
         text = _answer_impact(analysis)
         grounded = ["analysis.totals"]
@@ -305,7 +395,7 @@ def answer(analysis: dict, question: str, match_id: str | None = None) -> dict[s
         if result:
             llm_text, model = result
             return {
-                "answer": llm_text,
+                "answer": _plain_text(llm_text),
                 "grounded_in": ["analysis summary (LLM-augmented answer)"],
                 "engine": f"ollama:{model}",
                 "confident": NO_INFO not in llm_text,
@@ -320,7 +410,7 @@ def answer(analysis: dict, question: str, match_id: str | None = None) -> dict[s
     if text == NO_INFO:
         return {"answer": f"{NO_INFO}\n\n{CAN_ANSWER}", "grounded_in": [], "engine": "deterministic", "confident": False}
 
-    return {"answer": text, "grounded_in": grounded, "engine": "deterministic", "confident": True}
+    return {"answer": _plain_text(text), "grounded_in": grounded, "engine": "deterministic", "confident": True}
 
 
 def recipient_directory() -> list[dict]:

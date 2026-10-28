@@ -74,6 +74,16 @@ class OllamaUnresponsive(OllamaUnavailable):
     """
 
 
+class OllamaDisabled(OllamaUnavailable):
+    """OLLAMA_ENABLED=false - the operator turned the integration off deliberately.
+
+    Distinct from "not reachable" so the warning does not tell someone to run
+    `ollama serve` when the real instruction is to unset OLLAMA_ENABLED. Read at
+    call time (not cached at import) so it can be toggled per test or per request
+    without restarting the process.
+    """
+
+
 class OllamaModelMissing(OllamaUnavailable):
     """Ollama is running, but nothing Symbio can drive is installed.
 
@@ -141,6 +151,8 @@ def probe_ollama() -> str:
     classifier instead of blocking for the full inference timeout - which is
     what previously left the browser proxy hanging.
     """
+    if os.environ.get("OLLAMA_ENABLED", "true").strip().lower() in ("false", "0", "off", "no"):
+        raise OllamaDisabled("Ollama integration is disabled (OLLAMA_ENABLED=false)")
     installed = _installed_models()
     model = select_model(installed)
     if model is None:
@@ -169,6 +181,17 @@ def ollama_status() -> dict:
     real state and it needs a different fix than "not running".
     """
     base = {"url": OLLAMA_URL, "requested_model": OLLAMA_MODEL}
+    if os.environ.get("OLLAMA_ENABLED", "true").strip().lower() in ("false", "0", "off", "no"):
+        return {
+            **base,
+            "available": False,
+            "usable": False,
+            "model": OLLAMA_MODEL,
+            "model_present": False,
+            "auto_selected": False,
+            "installed_models": [],
+            "error": "Ollama integration is disabled (OLLAMA_ENABLED=false)",
+        }
     try:
         names = _installed_models(timeout=2.0)
     except Exception as exc:  # connection refused, timeout, bad JSON...
@@ -393,6 +416,8 @@ def _describe_failure(exc: Exception) -> str:
     or a clear message, so name the cause and the fix.
     """
     # Check the subclass first - it needs a different remedy.
+    if isinstance(exc, OllamaDisabled):
+        return "Ollama integration is disabled (OLLAMA_ENABLED=false)."
     if isinstance(exc, OllamaUnresponsive):
         return (
             f"Ollama at {OLLAMA_URL} accepted the connection but did not respond within "

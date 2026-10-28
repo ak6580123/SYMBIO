@@ -115,6 +115,136 @@ SECTOR_LABELS = {
     "adsorbent_manufacturer": "Adsorbent Manufacturing",
 }
 
+# What kind of reuse partner a sector represents. Deliberately not "buyer":
+# a cement plant, an artisan collective and a community programme are all
+# recipients, but they accept material for different reasons and on different
+# terms, and the demo has to show Industry->Industry, ->SME, ->Recycler,
+# ->Agriculture and ->Community flows as distinct routes.
+PARTNER_TYPE_LABELS = {
+    "industry": "Industry",
+    "sme": "SME / Artisan",
+    "recycler": "Recycler",
+    "processing": "Processing Partner",
+    "agriculture": "Agriculture",
+    "community": "Community / Household",
+}
+
+SECTOR_PARTNER_TYPE = {
+    "cement_manufacturing": "industry",
+    "brick_manufacturing": "industry",
+    "ceramic_tile_manufacturing": "industry",
+    "glass_manufacturing": "industry",
+    "ready_mix_concrete": "industry",
+    "road_infrastructure": "industry",
+    "furniture_manufacturer": "industry",
+    "adsorbent_manufacturer": "industry",
+    "packaging_company": "industry",
+    "energy_plant": "industry",
+    "fertiliser_company": "industry",
+    "construction_company": "industry",
+    "artisan_sme": "sme",
+    "plastic_recycler": "recycler",
+    "paper_recycler": "recycler",
+    "metal_recycler": "recycler",
+    "ewaste_processor": "recycler",
+    "waste_processor": "processing",
+    "composting_facility": "processing",
+    "biogas_plant": "processing",
+    "agriculture_farm": "agriculture",
+    "community_programme": "community",
+}
+
+
+def partner_type(sector: str) -> str:
+    """Deterministic partner category for a recipient sector.
+
+    Unknown sectors fall back to `industry` rather than being dropped, so adding
+    a sector to the knowledge base can never silently disappear from a filter.
+    """
+    return SECTOR_PARTNER_TYPE.get(sector, "industry")
+
+
+def summary_sentence(
+    *,
+    overall: float,
+    company_name: str,
+    material_name: str,
+    minimum: float,
+    maximum: float,
+    available: float,
+    distance_km: float | None,
+    requires_processing: bool,
+    processing_capability: list[str],
+    reuse_type: ReuseType,
+) -> str:
+    """One plain-language sentence explaining the ranking, from computed values.
+
+    A score on its own is not an explanation, and a hand-written justification
+    would drift from the numbers. Every figure below is the same one the score
+    was calculated from.
+    """
+    if overall >= 75:
+        tone = "Strong match"
+    elif overall >= 60:
+        tone = "Good match"
+    elif overall >= 45:
+        tone = "Possible match"
+    else:
+        tone = "Marginal match"
+
+    if distance_km is None:
+        haul = "at a distance Symbio could not calculate from the location stated"
+    else:
+        haul = f"is {distance_km} km away"
+    parts = [
+        f"{tone}: {company_name} accepts {material_name}, works with {minimum:g}-{maximum:g} t/month "
+        f"(this stream is {available:g} t/month) and {haul}"
+    ]
+
+    if requires_processing:
+        if processing_capability:
+            capability = processing_capability[0].replace("_", " ")
+            parts.append(f"it lists {capability} capability on site")
+        else:
+            parts.append("no processing capability is recorded for it, so material must arrive prepared")
+
+    if reuse_type == ReuseType.INDUSTRIAL_ONLY:
+        parts.append("industrial handling only - not for casual or household use")
+    elif reuse_type == ReuseType.RESTRICTED:
+        parts.append("restricted stream: licensed handlers only")
+    elif reuse_type == ReuseType.UNKNOWN:
+        parts.append("assessment route only, since the material is not yet identified")
+    elif reuse_type == ReuseType.DIRECT_REUSE:
+        parts.append("usable without further processing")
+
+    return ", ".join(parts) + "."
+
+
+
+# Ordering of safety levels, lowest risk first. The safety layer *gates* routes
+# with sets (see safety_gate); this ordering exists only so "what is the safest
+# option?" can rank answers without inventing a new judgement. `unknown` ranks
+# worst: not knowing a material's hazard is worse than knowing it is hazardous.
+SAFETY_RANK = {"low": 0, "moderate": 1, "high": 2, "hazardous": 3, "unknown": 4}
+
+# How much handling a route demands, lightest first. Used by the "least
+# processing" optimisation mode and by the pathway grouping - never by the
+# canonical score, whose weights are untouched. UNKNOWN sits above
+# industrial-only because an unresolved stream is the heaviest burden there is:
+# it has to be tested before anything else can be decided.
+PROCESSING_BURDEN = {
+    "DIRECT_REUSE": 0,
+    "REQUIRES_PROCESSING": 1,
+    "INDUSTRIAL_ONLY": 2,
+    "UNKNOWN": 3,
+    "RESTRICTED": 4,
+}
+
+
+def processing_burden(reuse_type: object) -> int:
+    """Rank of a reuse classification by handling burden (unknown values last)."""
+    return PROCESSING_BURDEN.get(str(getattr(reuse_type, "value", reuse_type)), 9)
+
 # Final product of each reuse route - used to draw the reuse pathway.
 REUSE_END_USE = {
     "cement_supplementary_material": "Blended Cement / Concrete",
@@ -181,11 +311,19 @@ def choose_reuse_category(material: dict, reuse_categories: list[str], recipient
         candidates = [r for r in material["reuse_categories"] if r in REUSE_END_USE]
     if not candidates:
         return None
-    preferred = SECTOR_REUSE_PREFERENCE.get(recipient_sector, [])
+    preferred = SECTOR_REUSE_PREFERENCE.get(recipient_sector)
+    if preferred is None:
+        # A sector the knowledge base has no preference list for: fall back to the
+        # material's own primary route rather than pretending to know the partner.
+        return candidates[0]
     for pref in preferred:
         if pref in candidates:
             return pref
-    return candidates[0]
+    # This partner's sector performs none of the reuse applications recorded for
+    # this material. Saying so is better than borrowing another sector's product -
+    # a cement plant must not be shown making particle board because the material
+    # happens to list that route. The pathway then reads "Assessed Material".
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -262,7 +400,20 @@ def quantity_score(available: float, minimum: float, maximum: float) -> tuple[fl
     return min(1.0, score), f"Available {available:g} t/month sits inside the recipient's {minimum:g}-{maximum:g} t/month range"
 
 
-def location_score(distance_km: float) -> tuple[float, str | None]:
+def location_score(distance_km: float | None) -> tuple[float, str | None]:
+    """Distance component, or a stated abstention.
+
+    A missing coordinate set scores a flat neutral value for *every* partner, with a
+    reason that says so. That is deliberately not 0 and not 1: a neutral 0.5 leaves
+    the other five components to decide the order, so nobody gains or loses ground
+    because the sender's town is not in the gazetteer. The weights themselves are
+    untouched.
+    """
+    if distance_km is None:
+        return 0.5, (
+            "No coordinates are available for the stated location, so distance is not scored - "
+            "every partner is neutral on this component"
+        )
     score = max(0.0, 1.0 - (distance_km / MAX_LOGISTICS_DISTANCE_KM) ** 1.2)
     if distance_km <= 25:
         reason = f"Very short haul ({distance_km:g} km) keeps transport cost and emissions low"
@@ -398,6 +549,41 @@ def safety_gate(
     return True, reuse_type, SafetyLevel(kb_safety), cautions
 
 
+def gate_rules_for(material: dict) -> list[str]:
+    """The safety-gate rules that will apply to this material, as plain text.
+
+    Written from the same record fields `safety_gate()` reads, in the same order,
+    so the knowledge-base page can show what the rules do without a second copy
+    of them that could drift. Nothing here is material-specific advice the
+    knowledge base does not already hold.
+    """
+    safety = material["safety_level"]
+    rules = [
+        "Confidence below 50% blocks a casual-use recommendation and adds a verify-before-committing caution.",
+    ]
+    if material["id"] == UNKNOWN_MATERIAL_ID:
+        rules.insert(0, "Unidentified material: only a licensed waste processor is offered, for assessment and testing, never for reuse.")
+    if safety == "hazardous":
+        rules.insert(0, "Hazardous stream: matched only with licensed handling capability, and with chain-of-custody paperwork.")
+    if safety in {"high", "hazardous"}:
+        rules.insert(1, "Never offered to community, farm or artisan recipients, however well the rest of the match scores.")
+    if safety == "moderate":
+        rules.append("Moderate risk reaching a non-industrial recipient: handling controls and a contamination check are required first.")
+    if material["requires_processing"]:
+        rules.append("Expects processing before use: a direct-reuse route is still flagged with that caution.")
+    if material["default_reuse_type"] == ReuseType.RESTRICTED.value:
+        rules.append(
+            "Default classification is RESTRICTED: only a recipient holding licensed handling capability is upgraded "
+            "to an industrial-use route; every other route keeps the restricted label."
+        )
+    elif material["default_reuse_type"] == ReuseType.INDUSTRIAL_ONLY.value:
+        rules.append(
+            "Default classification is INDUSTRIAL_ONLY: matched routes are labelled for industrial use and never as "
+            "direct reuse."
+        )
+    return rules
+
+
 def _resolve_reuse_type(material: dict, recipient: dict, casual: bool) -> ReuseType:
     try:
         declared = ReuseType(recipient["reuse_type"])
@@ -458,10 +644,14 @@ def find_matches(
             )
             continue
 
-        distance = haversine_km(
-            float(source["latitude"]), float(source["longitude"]),
-            recipient.latitude, recipient.longitude,
-        )
+        # No coordinates means no distance - not a distance measured from elsewhere.
+        if source.get("latitude") is None or source.get("longitude") is None:
+            distance: float | None = None
+        else:
+            distance = haversine_km(
+                float(source["latitude"]), float(source["longitude"]),
+                recipient.latitude, recipient.longitude,
+            )
 
         components: dict[str, float] = {}
         reasons: list[str] = []
@@ -512,6 +702,12 @@ def find_matches(
 
         matched_qty = min(available, recipient.max_quantity_t_per_month)
         price = max(recipient.estimated_price_inr_per_tonne, material["typical_price_inr_per_tonne"])
+        if material["id"] == UNKNOWN_MATERIAL_ID:
+            # An unidentified stream is sent for assessment, not sold for reuse, so
+            # no value can be claimed for it - and no tonnage of "whatever this is"
+            # should ever appear as revenue. The recipient's price still informs the
+            # ranking, which only orders partners against each other.
+            price = 0.0
 
         reuse_cat = choose_reuse_category(
             material,
@@ -519,6 +715,12 @@ def find_matches(
             recipient.sector,
         )
         end_use = REUSE_END_USE[reuse_cat] if reuse_cat else "Assessed Material"
+        if reuse_cat is None:
+            cautions.append(
+                "No reuse application is recorded for "
+                f"{SECTOR_LABELS.get(recipient.sector, recipient.sector).lower()} with this material: this route is a "
+                "material-family match, not a product this partner is listed as making."
+            )
 
         matches.append(
             Match(
@@ -543,6 +745,19 @@ def find_matches(
                 available_quantity_t_per_month=available,
                 estimated_value_inr_per_month=round(matched_qty * price, 2),
                 estimated_co2e_t_per_month=round(matched_qty * material["co2e_avoided_t_per_tonne"], 3),
+                summary=summary_sentence(
+                    overall=overall,
+                    company_name=recipient.company_name,
+                    material_name=material["name"],
+                    minimum=recipient.min_quantity_t_per_month,
+                    maximum=recipient.max_quantity_t_per_month,
+                    available=available,
+                    distance_km=distance,
+                    requires_processing=bool(material["requires_processing"])
+                    or reuse_type == ReuseType.REQUIRES_PROCESSING,
+                    processing_capability=list(recipient.processing_capability),
+                    reuse_type=reuse_type,
+                ),
                 reuse_pathway={
                     "steps": _pathway(source, material, reuse_type, recipient, end_use)
                 },  # type: ignore[arg-type]
@@ -550,7 +765,10 @@ def find_matches(
             )
         )
 
-    matches.sort(key=lambda m: (-m.overall_score, m.distance_km, m.recipient.id))
+    # Unranked-by-distance routes sort last rather than as if they were 0 km away.
+    matches.sort(
+        key=lambda m: (-m.overall_score, m.distance_km is None, m.distance_km or 0.0, m.recipient.id)
+    )
     return matches, excluded
 
 

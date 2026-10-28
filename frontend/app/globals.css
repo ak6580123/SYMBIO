@@ -2,79 +2,391 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Symbio design tokens
+   --------------------------------------------------------------------------
+   The five brand colours are the whole palette. Everything else is either one
+   of them, a darkened variant (pale amber and muted teal are too light to be
+   text on a light background), or a low-alpha wash of one of them. That single
+   rule is what stops 15 screens drifting into 15 different greens.
+
+   Measured against #E7EFE2 (card):
+     amber  #F1E379 as text      1.1:1 -> fills and washes only, never text
+     teal   #87BBA2 as text      1.9:1 -> fills and graphics; links use teal-strong
+     slate  #5D737E as text      4.2:1 -> secondary text, borders
+     cherry #500303 as text     13.2:1 -> danger, emphasis, hero accents
+     ink    #101F24 as text     14.4:1 -> headings and values
+
+   Triplets (`-rgb`) rather than hex, so Tailwind can put an alpha channel on
+   them: `bg-ink-850/60` and `border-amber-500/30` keep working, which is how the
+   palette could change in one file instead of four hundred class names.
+   ========================================================================== */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+
+  /* ---- brand ------------------------------------------------------------ */
+  --symbio-amber-rgb: 241 227 121;
+  --symbio-honeydew-rgb: 208 225 203;
+  --symbio-teal-rgb: 135 187 162;
+  --symbio-slate-rgb: 93 115 126;
+  --symbio-cherry-rgb: 80 3 3;
+
+  /* ---- readable variants of the same five ------------------------------- */
+  --symbio-teal-strong-rgb: 47 107 84; /* links, brand text on light */
+  --symbio-teal-deep-rgb: 36 82 63;
+  --symbio-amber-strong-rgb: 110 94 6; /* estimate + warning text on light */
+  --symbio-amber-ink-rgb: 42 38 7; /* text sitting on an amber fill */
+  --symbio-slate-deep-rgb: 60 84 96; /* informational text */
+  --symbio-cherry-mid-rgb: 126 42 34;
+  --symbio-clay-text-rgb: 138 66 39;
+  --symbio-clay-rgb: 169 88 63; /* data-viz only: cherry + amber, a 5th/6th series */
+
+  /* ---- semantic: background and surface -------------------------------- */
+  --canvas-rgb: 238 243 234; /* page */
+  --surface-rgb: 231 239 226; /* cards */
+  --surface-inset-rgb: 223 234 217; /* wells, inputs, table stripes */
+  --surface-muted-rgb: 214 228 207; /* hover, selected */
+
+  /* ---- semantic: text -------------------------------------------------- */
+  --text-strong-rgb: 16 31 36;
+  --text-rgb: 27 46 52;
+  --text-muted-rgb: 49 71 79;
+  --text-faint-rgb: 78 101 112;
+  --text-disabled-rgb: var(--symbio-slate-rgb);
+
+  /* ---- semantic: borders (blue slate, low alpha) ----------------------- */
+  --line-rgb: var(--symbio-slate-rgb);
+  --line-alpha: 0.32;
+  --line-strong-alpha: 0.5;
+
+  /* ---- semantic: role of each brand colour ----------------------------- */
+  --primary-rgb: var(--symbio-teal-rgb); /* brand / navigation / links */
+  --primary-ink-rgb: 18 36 29; /* text on a teal fill */
+  --secondary-rgb: var(--symbio-slate-rgb);
+  --accent-rgb: var(--symbio-amber-rgb); /* primary CTA, key metric, insight */
+  --accent-ink-rgb: var(--symbio-amber-ink-rgb);
+  --success-rgb: var(--symbio-teal-strong-rgb);
+  --warning-rgb: var(--symbio-amber-strong-rgb);
+  --danger-rgb: var(--symbio-cherry-rgb);
+  --info-rgb: var(--symbio-slate-deep-rgb);
+
+  /* ---- data visualisation ---------------------------------------------- */
+  --series-1-rgb: var(--symbio-teal-strong-rgb);
+  --series-2-rgb: var(--symbio-teal-rgb);
+  --series-3-rgb: var(--symbio-slate-rgb);
+  --series-4-rgb: var(--symbio-amber-rgb);
+  --series-5-rgb: var(--symbio-clay-rgb);
+  --series-6-rgb: var(--symbio-slate-deep-rgb);
+  --series-7-rgb: 201 180 71;
+  --series-8-rgb: var(--symbio-cherry-mid-rgb);
+
+  /* ---- shape and type -------------------------------------------------- */
+  --radius: 6px; /* deliberately not "huge rounded cards everywhere" */
+  --shadow: 0 1px 0 rgba(16, 31, 36, 0.04);
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
 }
 
 html,
 body {
-  background: #070a0e;
-  color: #e6edf3;
+  background: rgb(var(--canvas-rgb));
+  color: rgb(var(--text-rgb));
 }
 
 body {
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Thin, unobtrusive scrollbars to match the panel styling */
+/* Editorial headings: a serif against the UI sans, no webfont to download. */
+h1,
+h2 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  color: rgb(var(--text-strong-rgb));
+}
+
 * {
   scrollbar-width: thin;
-  scrollbar-color: #2b3846 transparent;
+  scrollbar-color: rgb(var(--line-rgb) / var(--line-strong-alpha)) transparent;
 }
 *::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 *::-webkit-scrollbar-thumb {
-  background: #2b3846;
+  background: rgb(var(--line-rgb) / var(--line-strong-alpha));
   border-radius: 4px;
+}
+
+::selection {
+  background: rgb(var(--accent-rgb));
+  color: rgb(var(--accent-ink-rgb));
 }
 
 @layer components {
   .panel {
-    @apply rounded-lg border border-ink-700 bg-ink-850;
+    @apply border bg-surface;
+    border-color: rgb(var(--line-rgb) / var(--line-alpha));
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
   }
   .panel-pad {
     @apply p-4;
   }
+  /* Small uppercase label above a value - the one place tracking runs wide. */
   .label {
-    @apply text-[11px] font-medium uppercase tracking-wider text-slate-500;
+    @apply text-[11px] font-medium uppercase tracking-[0.08em] text-text-faint;
   }
   .value {
-    @apply text-2xl font-semibold tabular-nums text-slate-100;
+    @apply text-2xl font-semibold tabular-nums text-text-strong;
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-md px-3.5 py-2 text-sm font-medium
+    @apply inline-flex items-center justify-center gap-2 px-3.5 py-2 text-sm font-medium
            transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+    border-radius: var(--radius);
   }
+  /* Pale amber CTA with dark ink on it - the only button that fills. */
   .btn-primary {
-    @apply btn bg-accent text-ink-950 hover:bg-emerald-300;
+    @apply btn;
+    background: rgb(var(--accent-rgb));
+    color: rgb(var(--accent-ink-rgb));
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: rgb(var(--series-7-rgb));
+  }
+  /* Secondary action: brand-teal text on a teal wash, no fill. */
+  .btn-quiet {
+    @apply btn text-[color:rgb(var(--symbio-teal-strong-rgb))];
+    background: rgb(var(--primary-rgb) / 0.18);
+  }
+  .btn-quiet:hover:not(:disabled) {
+    background: rgb(var(--primary-rgb) / 0.3);
   }
   .btn-ghost {
-    @apply btn border border-ink-600 bg-ink-800 text-slate-200 hover:border-ink-500 hover:bg-ink-700;
+    @apply btn border bg-surface text-text hover:bg-surface-muted;
+    border-color: rgb(var(--line-rgb) / var(--line-strong-alpha));
   }
   .input {
-    @apply w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 text-sm text-slate-100
-           placeholder:text-slate-600 focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/40;
+    @apply w-full px-3 py-2 text-sm text-text placeholder:text-text-disabled focus:outline-none;
+    background: rgb(var(--surface-inset-rgb));
+    border: 1px solid rgb(var(--line-rgb) / var(--line-strong-alpha));
+    border-radius: var(--radius);
+  }
+  .input:focus {
+    border-color: rgb(var(--primary-rgb));
+    box-shadow: 0 0 0 3px rgb(var(--primary-rgb) / 0.22);
   }
   .chip {
-    @apply inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px] font-medium;
+    @apply inline-flex items-center gap-1 border px-1.5 py-0.5 text-[11px] font-medium;
+    border-radius: 4px;
+  }
+  /* A hairline between two blocks of a panel - cheaper than a second card. */
+  .rule {
+    border-top: 1px solid rgb(var(--line-rgb) / var(--line-alpha));
+  }
+
+  /* Notices: a message, not a card and not a pill. One hairline, one wash of a
+     brand colour, and the tone decided in the same four places as every other
+     status in the app. */
+  .block-info {
+    border: 1px solid rgb(var(--symbio-slate-rgb) / 0.3);
+    background: rgb(var(--symbio-slate-rgb) / 0.07);
+    color: rgb(var(--symbio-slate-deep-rgb));
+  }
+  .block-warn {
+    border: 1px solid rgb(var(--symbio-amber-rgb) / 0.55);
+    background: rgb(var(--symbio-amber-rgb) / 0.22);
+    color: rgb(var(--symbio-amber-strong-rgb));
+  }
+  .block-danger {
+    border: 1px solid rgb(var(--symbio-cherry-rgb) / 0.26);
+    background: rgb(var(--symbio-cherry-rgb) / 0.05);
+    color: rgb(var(--symbio-cherry-rgb));
+  }
+  .block-success {
+    border: 1px solid rgb(var(--symbio-teal-rgb) / 0.5);
+    background: rgb(var(--symbio-teal-rgb) / 0.16);
+    color: rgb(var(--symbio-teal-strong-rgb));
+  }
+  .block-neutral {
+    border: 1px solid rgb(var(--line-rgb) / var(--line-alpha));
+    background: rgb(var(--surface-inset-rgb));
+    color: rgb(var(--text-muted-rgb));
+  }
+  .link {
+    @apply underline-offset-2 hover:underline;
+    color: rgb(var(--primary-rgb));
+  }
+  /* Status chips: one place decides what "safe", "caution" and "blocked" look
+     like, so a badge means the same thing on every screen. The word is always in
+     the chip too - colour is never the only signal. */
+  .chip-teal {
+    border-color: rgb(var(--symbio-teal-rgb) / 0.55);
+    background: rgb(var(--symbio-teal-rgb) / 0.28);
+    color: rgb(var(--symbio-teal-strong-rgb));
+  }
+  .chip-amber {
+    border-color: rgb(var(--symbio-amber-rgb) / 0.6);
+    background: rgb(var(--symbio-amber-rgb) / 0.4);
+    color: rgb(var(--symbio-amber-strong-rgb));
+  }
+  .chip-slate {
+    border-color: rgb(var(--symbio-slate-rgb) / 0.4);
+    background: rgb(var(--symbio-slate-rgb) / 0.14);
+    color: rgb(var(--symbio-slate-deep-rgb));
+  }
+  .chip-slate-deep {
+    border-color: rgb(var(--symbio-slate-rgb) / 0.55);
+    background: rgb(var(--symbio-slate-deep-rgb) / 0.12);
+    color: rgb(var(--symbio-slate-deep-rgb));
+  }
+  .chip-clay {
+    border-color: rgb(var(--symbio-clay-rgb) / 0.45);
+    background: rgb(var(--symbio-clay-rgb) / 0.16);
+    color: rgb(var(--symbio-clay-text-rgb));
+  }
+  .chip-cherry {
+    border-color: rgb(var(--symbio-cherry-rgb) / 0.3);
+    background: rgb(var(--symbio-cherry-rgb) / 0.07);
+    color: rgb(var(--symbio-cherry-rgb));
+  }
+  .chip-muted {
+    border-color: rgb(var(--line-rgb) / 0.4);
+    background: rgb(var(--line-rgb) / 0.1);
+    color: rgb(var(--text-muted-rgb));
+  }
+  /* Section eyebrow used by the landing page and page headers. */
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.14em] text-text-faint;
+  }
+
+  /* ---------------------------------------------------------------------
+     The type scale. Four sizes, no more: a page is read as page title,
+     section title, body, and caption, and a screen that needs a fifth is a
+     screen with a hierarchy problem.
+     --------------------------------------------------------------------- */
+  .page-title {
+    @apply text-[26px] font-semibold leading-[1.12] tracking-[-0.015em] text-text-strong;
+  }
+  @media (min-width: 640px) {
+    .page-title {
+      @apply text-[32px];
+    }
+  }
+  .page-subtitle {
+    @apply mt-2 max-w-[68ch] text-[14px] leading-[1.6] text-text-muted;
+  }
+  .section-title {
+    @apply text-[19px] font-semibold leading-snug text-text-strong;
+  }
+  .section-subtitle {
+    @apply mt-1 max-w-[74ch] text-[13px] leading-relaxed text-text-faint;
+  }
+  .card-title {
+    @apply text-[13.5px] font-semibold leading-snug text-text-strong;
+  }
+  .caption {
+    @apply text-[11px] leading-relaxed text-text-faint;
+  }
+  /* A number that leads a screen: the match score, the reused tonnage. */
+  .stat {
+    @apply text-[19px] font-semibold tabular-nums leading-none text-text-strong;
+  }
+  .stat-lg {
+    @apply text-[30px] font-semibold tabular-nums leading-none tracking-[-0.02em] text-text-strong;
+  }
+  /* Editorial measure: prose set at a width you can actually read. */
+  .measure {
+    @apply max-w-[68ch] text-[13px] leading-[1.65] text-text-muted;
+  }
+  /* Labels that sit beside a value in a table or a flow diagram. */
+  .tag-label {
+    @apply text-[10px] font-semibold uppercase tracking-[0.12em] text-text-faint;
+  }
+
+  /* One control height everywhere: a button, an input and a select that are
+     36, 38 and 41px tall on the same row is the single most reliable tell of a
+     hand-built interface. */
+  .btn {
+    min-height: 38px;
+  }
+  .btn-lg {
+    @apply px-5 text-[15px];
+    min-height: 46px;
+  }
+  .btn-sm {
+    @apply !px-2.5 !py-1 !text-[12px];
+    min-height: 30px;
+  }
+  .input,
+  .select {
+    min-height: 38px;
+  }
+  textarea.input {
+    min-height: 84px;
+  }
+  .select {
+    @apply appearance-none bg-no-repeat;
+    background-image: linear-gradient(45deg, transparent 50%, rgb(var(--text-faint-rgb)) 50%),
+      linear-gradient(135deg, rgb(var(--text-faint-rgb)) 50%, transparent 50%);
+    background-position: calc(100% - 15px) 17px, calc(100% - 10px) 17px;
+    background-size: 5px 5px, 5px 5px;
+    padding-right: 30px;
+  }
+  /* A field: its label, its control, its one line of help. */
+  .field-label {
+    @apply mb-1 block text-[11px] font-medium uppercase tracking-[0.08em] text-text-faint;
   }
 }
 
-/* Leaflet renders inside a sandboxed preview; force its tiles to sit behind markers. */
+/* Focus is visible on purpose: this is a data tool people drive by keyboard. */
+:focus-visible {
+  outline: 2px solid rgb(var(--symbio-teal-strong-rgb));
+  outline-offset: 1px;
+}
+
+/* Leaflet sits on the palette and keeps its popup chrome readable. */
 .leaflet-container {
-  background: #0b0f14;
+  background: rgb(var(--surface-inset-rgb));
   font: inherit;
 }
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {
-  background: #10161d;
-  color: #e6edf3;
-  border: 1px solid #2b3846;
+  background: rgb(var(--surface-rgb));
+  color: rgb(var(--text-rgb));
+  border: 1px solid rgb(var(--line-rgb) / var(--line-alpha));
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(16, 31, 36, 0.12);
 }
 .leaflet-popup-content {
   margin: 10px 12px;
   font-size: 12px;
   line-height: 1.5;
+}
+.leaflet-bar a {
+  background: rgb(var(--surface-rgb));
+  color: rgb(var(--text-muted-rgb));
+  border-bottom-color: rgb(var(--line-rgb) / var(--line-alpha));
+}
+.leaflet-bar a:hover {
+  background: rgb(var(--surface-muted-rgb));
+}
+
+/* With the basemap off the canvas draws its own coordinate grid, so the panel still
+   reads as a placed, pannable surface rather than an empty box. It sits on the tile
+   pane because a grid that pans with the map is what a grid should do. */
+.map-plain .leaflet-container {
+  background: rgb(var(--surface-inset-rgb));
+}
+.map-plain .leaflet-tile-pane {
+  background-image: repeating-linear-gradient(
+      to right,
+      rgb(var(--line-rgb) / var(--line-alpha)) 0 1px,
+      transparent 1px 72px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgb(var(--line-rgb) / var(--line-alpha)) 0 1px,
+      transparent 1px 72px
+    );
 }

@@ -10,6 +10,8 @@ const SUGGESTIONS = [
   'What can I do with this material?',
   'Why was this company recommended?',
   'Does this material require processing?',
+  'What is the safest reuse option here?',
+  'Which route has the best environmental benefit?',
   'Are there other sectors that could use it?',
   'What is the estimated impact?',
 ];
@@ -84,7 +86,7 @@ export default function Assistant({ analysisId, matchId }: { analysisId: string;
                   : 'border border-ink-700 bg-ink-900 text-slate-300'
               }`}
             >
-              {message.text}
+              {renderEmphasis(message.text)}
               {message.grounded && message.grounded.length > 0 && (
                 <p className="mt-2 border-t border-ink-700 pt-1.5 font-mono text-[10px] text-slate-600">
                   from: {message.grounded.join(', ')}
@@ -116,5 +118,22 @@ export default function Assistant({ analysisId, matchId }: { analysisId: string;
         </form>
       </div>
     </section>
+  );
+}
+
+/**
+ * The assistant's answers come back as plain text with **emphasis** markers and
+ * line breaks. Splitting on those runs keeps the reply readable without pulling
+ * in a markdown parser - the text itself is never reworded here.
+ */
+function renderEmphasis(text: string) {
+  return text.split(/(\*\*[^*\n]+\*\*)/g).map((part, index) =>
+    part.startsWith('**') && part.endsWith('**') && part.length > 4 ? (
+      <strong key={index} className="font-medium text-slate-100">
+        {part.slice(2, -2)}
+      </strong>
+    ) : (
+      <span key={index}>{part}</span>
+    ),
   );
 }

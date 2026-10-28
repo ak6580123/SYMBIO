@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:palette": "node scripts/check-palette.mjs"
   },
   "dependencies": {
     "leaflet": "^1.9.4",

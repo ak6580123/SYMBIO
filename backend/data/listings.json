@@ -1,0 +1,672 @@
+{
+  "_about": {
+    "what": "The demo marketplace: demand listings (a partner that needs a material) and supply listings (a facility with a stream to place).",
+    "status": "demo",
+    "generated_by": "backend/data/generate_listings.py",
+    "provenance_rules": [
+      "Parties are the same fictional companies in data/recipients.json and data/sources.json; a listing never introduces a company the profiles do not know.",
+      "A demand listing's offer price is that partner's own estimated_price_inr_per_tonne and its quantity sits inside its recorded min/max window.",
+      "A supply listing offers the source's recorded material_hint at the knowledge base's typical price for it.",
+      "Requirement notes, distance ceilings and tonnages are demo figures: no real buyer, tender or freight quote is represented here."
+    ],
+    "persistence": "Served from this file plus anything published in the running process. See backend/services/listings.py and the note on POST /api/listings.",
+    "shape_note": "Field names match the `listings` table in database/schema.sql, so the file can be swapped for a query without touching the models."
+  },
+  "listings": [
+    {
+      "id": "lst_dem_001",
+      "kind": "demand",
+      "party_id": "rec_cement_01",
+      "party_name": "Coromandel Cement Materials",
+      "party_sector": "cement_manufacturing",
+      "location": "Red Hills, Chennai region",
+      "latitude": 13.194,
+      "longitude": 80.18,
+      "material_ids": [
+        "fly_ash",
+        "bottom_ash"
+      ],
+      "quantity_t_per_month": 80.0,
+      "offer_price_inr_per_tonne": 1950.0,
+      "max_distance_km": 60.0,
+      "requirements": {
+        "moisture_below_percent": 25,
+        "excluded_contaminants": [
+          "municipal mixed waste",
+          "domestic ash"
+        ]
+      },
+      "notes": "Two rakes a month if the loss-on-ignition holds under 5%. Gate test on every tipper.",
+      "status": "open",
+      "created_at": "2026-09-01",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        3.0,
+        120.0
+      ],
+      "processing_capability": [
+        "drying",
+        "grinding",
+        "silos",
+        "bulk_logistics"
+      ],
+      "material_names": [
+        "Fly Ash",
+        "Bottom Ash"
+      ]
+    },
+    {
+      "id": "lst_dem_002",
+      "kind": "demand",
+      "party_id": "rec_brick_01",
+      "party_name": "Padi Interlock Bricks",
+      "party_sector": "brick_manufacturing",
+      "location": "Padi, Chennai region",
+      "latitude": 13.0969,
+      "longitude": 80.1881,
+      "material_ids": [
+        "fly_ash",
+        "marble_slurry"
+      ],
+      "quantity_t_per_month": 24.0,
+      "offer_price_inr_per_tonne": 1300.0,
+      "max_distance_km": 45.0,
+      "requirements": {
+        "moisture_below_percent": 40,
+        "excluded_contaminants": [
+          "plastic",
+          "municipal waste"
+        ]
+      },
+      "notes": "Wet slurry is fine - we have a curing yard. Anything with plastic in it stops the plant.",
+      "status": "open",
+      "created_at": "2026-09-03",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        2.0,
+        40.0
+      ],
+      "processing_capability": [
+        "mixing",
+        "curing_yard",
+        "block_press"
+      ],
+      "material_names": [
+        "Fly Ash",
+        "Marble Slurry"
+      ]
+    },
+    {
+      "id": "lst_dem_003",
+      "kind": "demand",
+      "party_id": "rec_paper_01",
+      "party_name": "Tamil Fibre & Paper Mills",
+      "party_sector": "paper_recycler",
+      "location": "Royapuram, Chennai region",
+      "latitude": 13.1083,
+      "longitude": 80.29,
+      "material_ids": [
+        "cardboard",
+        "paper_waste"
+      ],
+      "quantity_t_per_month": 30.0,
+      "offer_price_inr_per_tonne": 9200.0,
+      "max_distance_km": 35.0,
+      "requirements": {
+        "moisture_below_percent": 18,
+        "excluded_contaminants": [
+          "glossy print",
+          "plastic liner"
+        ]
+      },
+      "notes": "Baled and dry. A wet bale is weighed as water and paid as water.",
+      "status": "open",
+      "created_at": "2026-09-05",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        3.0,
+        200.0
+      ],
+      "processing_capability": [
+        "pulping",
+        "de-inking",
+        "baling"
+      ],
+      "material_names": [
+        "Cardboard / OCC",
+        "Mixed Paper Waste"
+      ]
+    },
+    {
+      "id": "lst_dem_004",
+      "kind": "demand",
+      "party_id": "rec_road_01",
+      "party_name": "Tamil Nadu Road Materials Unit",
+      "party_sector": "road_infrastructure",
+      "location": "Chromepet, Chennai region",
+      "latitude": 12.9516,
+      "longitude": 80.144,
+      "material_ids": [
+        "steel_slag",
+        "copper_slag",
+        "concrete_waste"
+      ],
+      "quantity_t_per_month": 150.0,
+      "offer_price_inr_per_tonne": 700.0,
+      "max_distance_km": 70.0,
+      "requirements": {
+        "excluded_contaminants": [
+          "organic waste",
+          "asbestos"
+        ],
+        "needs_leach_test": true
+      },
+      "notes": "Free material, paid haulage - the leach report is the price of admission.",
+      "status": "open",
+      "created_at": "2026-09-06",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        20.0,
+        800.0
+      ],
+      "processing_capability": [
+        "grading",
+        "mixing_plant",
+        "laying"
+      ],
+      "material_names": [
+        "Steel Slag",
+        "Copper Slag",
+        "Concrete Waste"
+      ]
+    },
+    {
+      "id": "lst_dem_005",
+      "kind": "demand",
+      "party_id": "rec_compost_01",
+      "party_name": "Perungudi Compost Yard",
+      "party_sector": "composting_facility",
+      "location": "Perungudi, Chennai region",
+      "latitude": 12.9714,
+      "longitude": 80.2414,
+      "material_ids": [
+        "green_waste",
+        "food_processing_waste"
+      ],
+      "quantity_t_per_month": 40.0,
+      "offer_price_inr_per_tonne": 400.0,
+      "max_distance_km": 25.0,
+      "requirements": {
+        "excluded_contaminants": [
+          "plastic film",
+          "glass",
+          "metal"
+        ]
+      },
+      "notes": "Segregated only. A mixed load is rejected at the weighbridge, not picked through.",
+      "status": "open",
+      "created_at": "2026-09-08",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        2.0,
+        50.0
+      ],
+      "processing_capability": [
+        "windrow_composting",
+        "turning",
+        "screening"
+      ],
+      "material_names": [
+        "Garden / Green Waste",
+        "Food Processing Waste"
+      ]
+    },
+    {
+      "id": "lst_dem_006",
+      "kind": "demand",
+      "party_id": "rec_adsorb_01",
+      "party_name": "AquaSorb Materials",
+      "party_sector": "adsorbent_manufacturer",
+      "location": "Oragadam, Chennai region",
+      "latitude": 12.79,
+      "longitude": 79.95,
+      "material_ids": [
+        "rice_husk_ash",
+        "sawdust"
+      ],
+      "quantity_t_per_month": 4.0,
+      "offer_price_inr_per_tonne": 3800.0,
+      "max_distance_km": 120.0,
+      "requirements": {
+        "moisture_below_percent": 12,
+        "needs_assay": true
+      },
+      "notes": "Small tonnage, tight specification - an assay before anything enters the store.",
+      "status": "open",
+      "created_at": "2026-09-10",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        1.0,
+        30.0
+      ],
+      "processing_capability": [
+        "activation",
+        "grinding",
+        "quality_lab"
+      ],
+      "material_names": [
+        "Rice Husk Ash",
+        "Sawdust"
+      ]
+    },
+    {
+      "id": "lst_dem_007",
+      "kind": "demand",
+      "party_id": "rec_furn_01",
+      "party_name": "Timber Craft Furniture",
+      "party_sector": "furniture_manufacturer",
+      "location": "Padi, Chennai region",
+      "latitude": 13.0969,
+      "longitude": 80.1881,
+      "material_ids": [
+        "textile_waste"
+      ],
+      "quantity_t_per_month": 2.5,
+      "offer_price_inr_per_tonne": 2100.0,
+      "max_distance_km": 18.0,
+      "requirements": {
+        "excluded_contaminants": [
+          "foam",
+          "synthetic fabric"
+        ]
+      },
+      "notes": "Woven cotton offcuts for upholstery filling. Foam is not textile and stays out.",
+      "status": "open",
+      "created_at": "2026-09-12",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        0.5,
+        25.0
+      ],
+      "processing_capability": [
+        "drying",
+        "panel_press",
+        "upholstery"
+      ],
+      "material_names": [
+        "Textile Waste"
+      ]
+    },
+    {
+      "id": "lst_dem_008",
+      "kind": "demand",
+      "party_id": "rec_pack_01",
+      "party_name": "CirclePack Solutions",
+      "party_sector": "packaging_company",
+      "location": "Padi, Chennai region",
+      "latitude": 13.0969,
+      "longitude": 80.1881,
+      "material_ids": [
+        "cardboard"
+      ],
+      "quantity_t_per_month": 12.0,
+      "offer_price_inr_per_tonne": 8000.0,
+      "max_distance_km": 30.0,
+      "requirements": {
+        "moisture_below_percent": 20
+      },
+      "notes": "Trim-offs and punchings only - clean fibre, already baled, is what we can pay for.",
+      "status": "open",
+      "created_at": "2026-09-14",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        1.0,
+        35.0
+      ],
+      "processing_capability": [
+        "converting",
+        "die_cutting"
+      ],
+      "material_names": [
+        "Cardboard / OCC"
+      ]
+    },
+    {
+      "id": "lst_dem_009",
+      "kind": "demand",
+      "party_id": "rec_plastic_01",
+      "party_name": "RePolymer Recyclers",
+      "party_sector": "plastic_recycler",
+      "location": "Ambattur, Chennai region",
+      "latitude": 13.0947,
+      "longitude": 80.1622,
+      "material_ids": [
+        "plastic_pet"
+      ],
+      "quantity_t_per_month": 20.0,
+      "offer_price_inr_per_tonne": 20000.0,
+      "max_distance_km": 55.0,
+      "requirements": {
+        "excluded_contaminants": [
+          "multilayer film",
+          "PVC"
+        ]
+      },
+      "notes": "Clear or light-blue PET only, caps and labels off. Mixed polymer goes to the other line.",
+      "status": "open",
+      "created_at": "2026-09-15",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        1.0,
+        45.0
+      ],
+      "processing_capability": [
+        "washing",
+        "sorting",
+        "flaking",
+        "pelletising"
+      ],
+      "material_names": [
+        "PET Plastic Waste"
+      ]
+    },
+    {
+      "id": "lst_dem_010",
+      "kind": "demand",
+      "party_id": "rec_glass_01",
+      "party_name": "Coromandel Glass Works",
+      "party_sector": "glass_manufacturing",
+      "location": "Kattupalli, Chennai region",
+      "latitude": 13.25,
+      "longitude": 80.32,
+      "material_ids": [
+        "glass_waste"
+      ],
+      "quantity_t_per_month": 25.0,
+      "offer_price_inr_per_tonne": 3100.0,
+      "max_distance_km": 40.0,
+      "requirements": {
+        "excluded_contaminants": [
+          "ceramics",
+          "mirror glass",
+          "Pyrex"
+        ]
+      },
+      "notes": "Colour-sorted cullet. One piece of porcelain in a batch costs a furnace charge.",
+      "status": "open",
+      "created_at": "2026-09-16",
+      "origin": "seed",
+      "quantity_window_t_per_month": [
+        5.0,
+        300.0
+      ],
+      "processing_capability": [
+        "colour_sorting",
+        "furnace",
+        "batching"
+      ],
+      "material_names": [
+        "Glass Waste / Cullet"
+      ]
+    },
+    {
+      "id": "lst_sup_001",
+      "kind": "supply",
+      "party_id": "src_ind_01",
+      "party_name": "Thermal Power Station - Unit 3 (Demo facility)",
+      "party_sector": "industry",
+      "location": "Manali, Chennai",
+      "latitude": 13.1667,
+      "longitude": 80.2667,
+      "material_ids": [
+        "fly_ash"
+      ],
+      "quantity_t_per_month": 55.0,
+      "asking_price_inr_per_tonne": 1800.0,
+      "max_distance_km": 80.0,
+      "requirements": {
+        "moisture_below_percent": 30
+      },
+      "notes": "Dry electrostatic precipitator ash, consistent quality, own tipper fleet.",
+      "status": "open",
+      "created_at": "2026-09-02",
+      "origin": "seed",
+      "description": "Pulverised coal boiler flue gas residue collected from electrostatic precipitators.",
+      "material_safety_level": "moderate",
+      "material_reuse_type": "REQUIRES_PROCESSING",
+      "material_names": [
+        "Fly Ash"
+      ]
+    },
+    {
+      "id": "lst_sup_002",
+      "kind": "supply",
+      "party_id": "src_sme_01",
+      "party_name": "Perambur Woodworking Unit (Demo SME)",
+      "party_sector": "sme",
+      "location": "Perambur, Chennai",
+      "latitude": 13.1067,
+      "longitude": 80.2341,
+      "material_ids": [
+        "sawdust"
+      ],
+      "quantity_t_per_month": 6.0,
+      "asking_price_inr_per_tonne": 1500.0,
+      "max_distance_km": 20.0,
+      "requirements": {
+        "excluded_contaminants": [
+          "nails",
+          "concrete"
+        ]
+      },
+      "notes": "De-nailed where we can. Bags, no pallet - a shared tempo load at a time.",
+      "status": "open",
+      "created_at": "2026-09-04",
+      "origin": "seed",
+      "description": "Sawdust and offcuts from a small furniture workshop.",
+      "material_safety_level": "low",
+      "material_reuse_type": "DIRECT_REUSE",
+      "material_names": [
+        "Sawdust"
+      ]
+    },
+    {
+      "id": "lst_sup_003",
+      "kind": "supply",
+      "party_id": "src_house_01",
+      "party_name": "Anna Nagar Apartment Complex (Demo household)",
+      "party_sector": "household",
+      "location": "Anna Nagar, Chennai",
+      "latitude": 13.085,
+      "longitude": 80.2101,
+      "material_ids": [
+        "cardboard"
+      ],
+      "quantity_t_per_month": 3.0,
+      "asking_price_inr_per_tonne": 9000.0,
+      "max_distance_km": 15.0,
+      "requirements": {},
+      "notes": "240 apartments, baled weekly by the resident committee.",
+      "status": "open",
+      "created_at": "2026-09-07",
+      "origin": "seed",
+      "description": "Segregated packaging waste from 240 households.",
+      "material_safety_level": "low",
+      "material_reuse_type": "DIRECT_REUSE",
+      "material_names": [
+        "Cardboard / OCC"
+      ]
+    },
+    {
+      "id": "lst_sup_004",
+      "kind": "supply",
+      "party_id": "src_ind_05",
+      "party_name": "Chengalpattu Stone Processing Park (Demo facility)",
+      "party_sector": "industry",
+      "location": "Chengalpattu, Chennai",
+      "latitude": 12.6878,
+      "longitude": 79.98,
+      "material_ids": [
+        "marble_slurry"
+      ],
+      "quantity_t_per_month": 45.0,
+      "asking_price_inr_per_tonne": 400.0,
+      "max_distance_km": 40.0,
+      "requirements": {},
+      "notes": "Stone-cutting slurry; filter-pressed cake once a week, the rest as it comes off the saw.",
+      "status": "open",
+      "created_at": "2026-09-09",
+      "origin": "seed",
+      "description": "Wet slurry from granite and marble cutting lines.",
+      "material_safety_level": "low",
+      "material_reuse_type": "REQUIRES_PROCESSING",
+      "material_names": [
+        "Marble Slurry"
+      ]
+    },
+    {
+      "id": "lst_sup_005",
+      "kind": "supply",
+      "party_id": "src_agri_01",
+      "party_name": "Red Hills Paddy Cluster (Demo agriculture)",
+      "party_sector": "agriculture",
+      "location": "Red Hills, Chennai",
+      "latitude": 13.194,
+      "longitude": 80.18,
+      "material_ids": [
+        "rice_husk_ash"
+      ],
+      "quantity_t_per_month": 12.0,
+      "asking_price_inr_per_tonne": 3500.0,
+      "max_distance_km": 60.0,
+      "requirements": {},
+      "notes": "Husk from the paddy mill, and boiler ash when it has not been allowed to sinter.",
+      "status": "open",
+      "created_at": "2026-09-11",
+      "origin": "seed",
+      "description": "Husk ash from cluster-level rice milling.",
+      "material_safety_level": "low",
+      "material_reuse_type": "DIRECT_REUSE",
+      "material_names": [
+        "Rice Husk Ash"
+      ]
+    },
+    {
+      "id": "lst_sup_006",
+      "kind": "supply",
+      "party_id": "src_ind_04",
+      "party_name": "Ambattur Metal Castings Foundry (Demo facility)",
+      "party_sector": "industry",
+      "location": "Ambattur, Chennai",
+      "latitude": 13.0947,
+      "longitude": 80.1622,
+      "material_ids": [
+        "foundry_sand"
+      ],
+      "quantity_t_per_month": 18.0,
+      "asking_price_inr_per_tonne": 500.0,
+      "max_distance_km": 50.0,
+      "requirements": {
+        "needs_leach_test": true
+      },
+      "notes": "Reclaimed moulding sand, screened, chloride untested - the report is on you.",
+      "status": "open",
+      "created_at": "2026-09-13",
+      "origin": "seed",
+      "description": "Spent moulding sand from iron casting operations.",
+      "material_safety_level": "moderate",
+      "material_reuse_type": "REQUIRES_PROCESSING",
+      "material_names": [
+        "Foundry Sand"
+      ]
+    },
+    {
+      "id": "lst_sup_007",
+      "kind": "supply",
+      "party_id": "src_sme_02",
+      "party_name": "Guindy Garment Unit (Demo SME)",
+      "party_sector": "sme",
+      "location": "Guindy, Chennai",
+      "latitude": 13.0067,
+      "longitude": 80.2206,
+      "material_ids": [
+        "textile_waste"
+      ],
+      "quantity_t_per_month": 4.0,
+      "asking_price_inr_per_tonne": 12000.0,
+      "max_distance_km": 22.0,
+      "requirements": {
+        "excluded_contaminants": [
+          "foam",
+          "synthetic blend"
+        ]
+      },
+      "notes": "Cutroom offcuts, cotton and silk, kept separate from the padding since the last audit.",
+      "status": "open",
+      "created_at": "2026-09-17",
+      "origin": "seed",
+      "description": "Fabric offcuts and rejected garments.",
+      "material_safety_level": "low",
+      "material_reuse_type": "REQUIRES_PROCESSING",
+      "material_names": [
+        "Textile Waste"
+      ]
+    },
+    {
+      "id": "lst_sup_008",
+      "kind": "supply",
+      "party_id": "src_house_02",
+      "party_name": "T. Nagar Retail Street (Demo household/community)",
+      "party_sector": "household",
+      "location": "T. Nagar, Chennai",
+      "latitude": 13.0418,
+      "longitude": 80.2341,
+      "material_ids": [
+        "plastic_pet"
+      ],
+      "quantity_t_per_month": 2.5,
+      "asking_price_inr_per_tonne": 22000.0,
+      "max_distance_km": 12.0,
+      "requirements": {},
+      "notes": "Bottle collection from 14 shops, rinsed and de-capped by the shop staff.",
+      "status": "open",
+      "created_at": "2026-09-18",
+      "origin": "seed",
+      "description": "Beverage bottles collected from street bins.",
+      "material_safety_level": "low",
+      "material_reuse_type": "REQUIRES_PROCESSING",
+      "material_names": [
+        "PET Plastic Waste"
+      ]
+    },
+    {
+      "id": "lst_sup_009",
+      "kind": "supply",
+      "party_id": "src_ind_07",
+      "party_name": "Tambaram Electronics Assembly (Demo facility)",
+      "party_sector": "industry",
+      "location": "Tambaram, Chennai",
+      "latitude": 12.9249,
+      "longitude": 80.1,
+      "material_ids": [
+        "ewaste"
+      ],
+      "quantity_t_per_month": 1.5,
+      "asking_price_inr_per_tonne": 60000.0,
+      "max_distance_km": 30.0,
+      "requirements": {
+        "needs_licensed_handler": true
+      },
+      "notes": "Board scrap and failed assemblies. Manifest and licensed transporter only.",
+      "status": "open",
+      "created_at": "2026-09-19",
+      "origin": "seed",
+      "description": "Rejected boards, cables and assemblies from the assembly line.",
+      "material_safety_level": "hazardous",
+      "material_reuse_type": "INDUSTRIAL_ONLY",
+      "material_names": [
+        "E-Waste"
+      ]
+    }
+  ]
+}

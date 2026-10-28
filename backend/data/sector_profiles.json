@@ -1,0 +1,399 @@
+{
+  "_about": {
+    "what": "Per-sector industrial profiles: what each kind of plant makes, what it takes in, what it throws out, and what it is certified for.",
+    "status": "demo",
+    "how_to_read": "These are templates per sector, not claims about a named company. A recipient's own recorded fields always win: `services/profiles.py` merges the template with the record and labels every line with where it came from. Anything the knowledge base does not model is left as a name with `material_id: null` rather than being matched to a nearby material.",
+    "shape_note": "Field names mirror the columns a Postgres `sector_profiles` table would carry (§18): nothing here needs a shape change to move off JSON."
+  },
+  "profiles": {
+    "cement_manufacturing": {
+      "label": "Cement manufacturing",
+      "products": ["Ordinary Portland cement", "Portland pozzolana cement", "Masonry cement", "Ground-blend slag cement"],
+      "materials_required": [
+        { "material_id": "fly_ash", "name": "Class F fly ash", "note": "pozzolanic addition, typically 15-25% replacement in blended cements" },
+        { "material_id": "bottom_ash", "name": "Bottom ash", "note": "accepted as a lower-value pozzolan, usually after screening" },
+        { "material_id": "steel_slag", "name": "Granulated blast-furnace slag", "note": "ground with clinker for slag cements" },
+        { "material_id": "gypsum_waste", "name": "Gypsum set regulator", "note": "3-5% grind with clinker to control setting" },
+        { "material_id": "rice_husk_ash", "name": "Rice husk ash", "note": "amorphous silica, reactive enough for blending only when finely ground" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Kiln dust and baghouse fines", "note": "recycled into the raw mill on site; not modelled as an outbound stream" },
+        { "material_id": "paper_waste", "name": "Worn paper sack and jute lining", "note": "paper mill feedstock once the cement dust is shaken out" },
+        { "material_id": "plastic_mixed", "name": "Polyliner and stretch wrap", "note": "often burned as alternative fuel rather than sold" }
+      ],
+      "certifications": ["BIS IS 1489 (Portland pozzolana cement)", "BIS IS 269 (OPC)", "TNPSC Consent to Operate", "CGWA no-objection for groundwater"],
+      "intake_note": "Tipper intake with a loss-on-ignition and moisture test at the gate; rail siding is preferred above roughly 40 t/month.",
+      "capability_summary": "Grinding, blending, silo storage and bulk logistics; the plant can dry a wet load but cannot sort it."
+    },
+    "brick_manufacturing": {
+      "label": "Brick and block manufacturing",
+      "products": ["Fly-ash clay bricks", "Concrete hollow blocks", "Paver blocks", "Kiln-fired solid bricks"],
+      "materials_required": [
+        { "material_id": "fly_ash", "name": "Fly ash", "note": "60-70% of a fly-ash brick body, bound with lime and gypsum" },
+        { "material_id": "marble_slurry", "name": "Marble slurry", "note": "filler that reduces clay demand; needs dewatering first" },
+        { "material_id": "concrete_waste", "name": "Crushed concrete fines", "note": "inert filler for non-structural blocks" },
+        { "material_id": "lime_sludge", "name": "Lime sludge", "note": "substitutes the lime addition, subject to a chloride check" }
+      ],
+      "byproducts": [
+        { "material_id": "brick_waste", "name": "Over-burnt and broken bricks", "note": "crushed back into block mix or used as sub-base" },
+        { "material_id": "plastic_mixed", "name": "Plastic wrapping from cement bags", "note": "small volume, usually sold to an aggregator" }
+      ],
+      "certifications": ["BIS IS 12894 (fly-ash bricks)", "TNPSC Consent to Operate for the kiln"],
+      "intake_note": "Wet material is welcome here: a slurry can be dewatered in the curing yard, but a load that arrives as running mud is turned away.",
+      "capability_summary": "Mixing, block pressing, steam curing and a yard that can hold several weeks of stock."
+    },
+    "ready_mix_concrete": {
+      "label": "Ready-mix concrete",
+      "products": ["M20-M40 ready-mix", "Self-compacting concrete", "Pump-delivered structural mixes"],
+      "materials_required": [
+        { "material_id": "fly_ash", "name": "Class F fly ash", "note": "mineral addition for workability and durability" },
+        { "material_id": "steel_slag", "name": "Slag aggregate", "note": "used in structural mixes after a soundness test" },
+        { "material_id": "concrete_waste", "name": "Recycled coarse aggregate", "note": "accepted for sub-base and non-structural grades only" }
+      ],
+      "byproducts": [
+        { "material_id": "concrete_waste", "name": "Return and overshoot concrete", "note": "hardened leftover from the mixer drum" },
+        { "material_id": "lime_sludge", "name": "Wash-water neutralisation sludge", "note": "high-pH sludge from reclaiming wash water; a brick plant can take it" }
+      ],
+      "certifications": ["IS 4926 (ready-mixed concrete)", "NABL-accredited batching plant laboratory"],
+      "intake_note": "Powders must arrive dry and separately siloed; a mixed load of ash and slag goes back on the lorry.",
+      "capability_summary": "Batching, admixing and quality testing; no drying or grinding capacity."
+    },
+    "construction_company": {
+      "label": "Construction contracting",
+      "products": ["Building structural frames", "Site development and infill", "Demolition and site clearance works"],
+      "materials_required": [
+        { "material_id": "concrete_waste", "name": "Crushed concrete", "note": "sub-base and hardcore fill on site" },
+        { "material_id": "brick_waste", "name": "Broken brick", "note": "fill and levelling material" },
+        { "material_id": "plastic_mixed", "name": "Plastic aggregate", "note": "used in non-structural fill where approved by the engineer" }
+      ],
+      "byproducts": [
+        { "material_id": "concrete_waste", "name": "Demolition rubble and broken concrete", "note": "the largest stream by tonnage on any demolition site" },
+        { "material_id": "metal_scrap", "name": "Rebar offcuts and scaffold pins", "note": "sold by weight to a metal recycler" },
+        { "material_id": "wood_waste", "name": "Shuttering plywood and timber props", "note": "reused a few times, then fuel or board stock" },
+        { "material_id": "gypsum_waste", "name": "Broken plasterboard", "note": "must be kept out of mixed rubble: gypsum in landfill generates hydrogen sulphide" }
+      ],
+      "certifications": ["Construction & Demolition Waste authorisation (State PCB)", "BIS IS 1652 for aggregate use"],
+      "intake_note": "Accepts on a haul-distance rule rather than a specification: clean, sorted loads at under about 25 km.",
+      "capability_summary": "On-site crushing, screening and compaction; no laboratory and no washing plant."
+    },
+    "road_infrastructure": {
+      "label": "Road and infrastructure works",
+      "products": ["Wet mix macadam sub-base", "Dense graded and bituminous layers", "Embankment and approach-fill"],
+      "materials_required": [
+        { "material_id": "steel_slag", "name": "Air-cooled slag aggregate", "note": "bound base course where soundness testing passes" },
+        { "material_id": "copper_slag", "name": "Copper slag", "note": "dense aggregate, accepted only with a leach test on record" },
+        { "material_id": "concrete_waste", "name": "Recycled granular sub-base", "note": "lower layers and embankment" },
+        { "material_id": "foundry_sand", "name": "Reclaimed foundry sand", "note": "sub-layers only, with a chloride and leach report" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Milled asphalt planings", "note": "recycled into the warm mix on site; no knowledge-base material models it" },
+        { "material_id": "concrete_waste", "name": "Broken kerb and pavement pieces", "note": "crushed for haul-road repair" }
+      ],
+      "certifications": ["MoRT&H specification for slag in road layers", "TNDPL/NHAI material approval per project"],
+      "intake_note": "Anything going into a road layer needs a leachability report attached to the delivery Challan.",
+      "capability_summary": "Spreading, compaction and grading; the plant screens but never washes."
+    },
+    "fertiliser_company": {
+      "label": "Fertiliser and soil nutrition",
+      "products": ["Single super phosphate", "NPK blended fertiliser", "Lime-based soil conditioner", "Organic-mineral compost"],
+      "materials_required": [
+        { "material_id": "phosphogypsum", "name": "Phosphogypsum", "note": "handled here as a by-product stream and as a sulphur source for blends, under clearance" },
+        { "material_id": "rice_husk_ash", "name": "Rice husk potash ash", "note": "a real potassic amendment where KCl is priced out" },
+        { "material_id": "lime_sludge", "name": "Lime sludge", "note": "neutralising agent in a conditioner blend, after a metals test" },
+        { "material_id": "green_waste", "name": "Green waste", "note": "carbon source for the organic line" }
+      ],
+      "byproducts": [
+        { "material_id": "phosphogypsum", "name": "Phosphogypsum stockpile", "note": "one tonne per tonne of acid-produced phosphate; the classic symbiosis candidate" },
+        { "material_id": "lime_sludge", "name": "Scrubber and fluorine sludge", "note": "must be characterised before it leaves the gate" },
+        { "material_id": "bagasse_ash", "name": "Boiler bagasse ash", "note": "sold as a pozzolan when the silica content holds" }
+      ],
+      "certifications": ["Fertiliser Control Order registration", "TNPSC Consent to Operate for acid handling"],
+      "intake_note": "Bulk intake only, and nothing enters the organic line without a contaminant declaration.",
+      "capability_summary": "Blending, granulation and laboratory control; the site can test but not melt."
+    },
+    "composting_facility": {
+      "label": "Organic waste composting",
+      "products": ["Graded compost", "Vermicompost", "Landscaping mulch", "Bioreactive cover soil"],
+      "materials_required": [
+        { "material_id": "green_waste", "name": "Garden and park waste", "note": "the bulk of the windrow" },
+        { "material_id": "food_processing_waste", "name": "Food processing residue", "note": "nitrogen-rich; needs bulking agent and daily cover" },
+        { "material_id": "sawdust", "name": "Sawdust", "note": "carbon bulking agent and odour cover" },
+        { "material_id": "paper_waste", "name": "Shredded non-glossy paper", "note": "bulking agent only - glossy stock adds inks nobody wants" },
+        { "material_id": "textile_waste", "name": "Natural-fibre rags and coir", "note": "slow carbon; must be free of synthetics" }
+      ],
+      "byproducts": [
+        { "material_id": "plastic_mixed", "name": "Plastic film and rejects picked from the gate line", "note": "the reason a receiving screen matters" },
+        { "material_id": null, "name": "Compost fines and oversize screen reject", "note": "recycled into the next windrow; not modelled as an outbound material" }
+      ],
+      "certifications": ["Solid Waste Management Rules authorisation", "Fertiliser Control Order compost grading"],
+      "intake_note": "Source segregation decides acceptance: a mixed load with visible plastic is rejected at the weighbridge.",
+      "capability_summary": "Windrow turning, in-vessel digestion and screening; no metal or plastic processing."
+    },
+    "plastic_recycler": {
+      "label": "Plastic recycling",
+      "products": ["Reprocessed LDPE granules", "rPET flakes and pellets", "Plastic lumber and profiles"],
+      "materials_required": [
+        { "material_id": "plastic_mixed", "name": "Mixed post-consumer plastic", "note": "washed, hot-washed and extruded into granules" },
+        { "material_id": "plastic_pet", "name": "PET bottles and strapping", "note": "flaked and hot-washed for bottle-grade or fibre-grade flake" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Wash sludge and float-sink reject", "note": "dewatered on site; no knowledge-base material covers it" },
+        { "material_id": "plastic_mixed", "name": "Multilayer and metallised film", "note": "not recyclable in this line - goes to a co-processing cement kiln" },
+        { "material_id": "paper_waste", "name": "Paper labels and liners", "note": "separated in the wash and sold as low grade" }
+      ],
+      "certifications": ["TNPSC authorisation for plastic recycling", "Plastic Waste Management Rules registration"],
+      "intake_note": "Contamination is priced, not refused: oily or food-loaded stock is discounted or turned away.",
+      "capability_summary": "Shredding, washing, separation and extrusion; can take colour-sorted bales only."
+    },
+    "paper_recycler": {
+      "label": "Paper recycling and board",
+      "products": ["Kraft wrapping paper", "Corrugating medium", "Recycled board and cartons"],
+      "materials_required": [
+        { "material_id": "paper_waste", "name": "Recovered paper and mixed office waste", "note": "pulp feedstock; the lower the ink load, the better the grade" },
+        { "material_id": "cardboard", "name": "Old corrugated cardboard", "note": "the fibre that holds the mill together" },
+        { "material_id": "lime_sludge", "name": "De-inking sludge", "note": "accepted as filler extender in low-grade board, up to a limit" },
+        { "material_id": "textile_waste", "name": "Cotton rag stock", "note": "for durable kraft where wood fibre is short" }
+      ],
+      "byproducts": [
+        { "material_id": "lime_sludge", "name": "De-inking and screening sludge", "note": "filter-pressed cake; a brick plant or cement mill can take it" },
+        { "material_id": null, "name": "Screen rejects and stickies", "note": "burned as refuse-derived fuel where a kiln is close enough" },
+        { "material_id": "plastic_mixed", "name": "Tape, shrink film and bag liners", "note": "picked out at the pulper" }
+      ],
+      "certifications": ["TNPSC Consent to Operate for effluent treatment", "FSC/PEFC chain of custody where export board is made"],
+      "intake_note": "Baled, sorted and dry: a wet bale is discounted because the water is paid for as fibre.",
+      "capability_summary": "Pulping, de-inking, board forming and converting; sludge press but no dryer for outside loads."
+    },
+    "packaging_company": {
+      "label": "Packaging and corrugation",
+      "products": ["Corrugated boxes", "Die-cut cartons", "Protective paper packaging"],
+      "materials_required": [
+        { "material_id": "cardboard", "name": "Old corrugated cardboard", "note": "reclaimed liner and medium stock" },
+        { "material_id": "paper_waste", "name": "Recovered paper", "note": "for the fluting mill" },
+        { "material_id": "plastic_pet", "name": "PET strapping and film stock", "note": "purchased, not waste - listed so the intake profile is complete" }
+      ],
+      "byproducts": [
+        { "material_id": "cardboard", "name": "Trim-offs and punchings from the die", "note": "clean, dry and already baled - the easiest stream to place" },
+        { "material_id": "wood_waste", "name": "Broken pallets and dunnage", "note": "sawdust-worthy once the nails are pulled" },
+        { "material_id": "plastic_mixed", "name": "Stretch wrap and strapping offcuts", "note": "small volume, needs aggregating to interest a recycler" }
+      ],
+      "certifications": ["ISO 9001 quality system at the converting unit", "EPR registration for multilayer packaging placed on the market"],
+      "intake_note": "Wants clean, dry, single-grade fibre; a mixed bale is worth less than the freight.",
+      "capability_summary": "Converting, die cutting and baling; no pulping, so contaminated fibre goes out again."
+    },
+    "metal_recycler": {
+      "label": "Metal recycling",
+      "products": ["Re-melted aluminium and copper ingots", "Sorted ferrous scrap bundles", "Non-ferrous turnings briquettes"],
+      "materials_required": [
+        { "material_id": "metal_scrap", "name": "Ferrous and non-ferrous scrap", "note": "sorted, sheared and remelted" },
+        { "material_id": "aluminium_dross", "name": "Aluminium dross", "note": "salt-sky or rotary furnace recovery of the metal still in it" },
+        { "material_id": "copper_slag", "name": "Copper slag", "note": "copper prill recovered before the slag goes to abrasives" },
+        { "material_id": "spent_catalyst", "name": "Spent metal-bearing catalyst", "note": "restricted intake: licensed handler, assay first, chain of custody documented" }
+      ],
+      "byproducts": [
+        { "material_id": "foundry_sand", "name": "Furnace and moulding sand residues", "note": "bonded sand that a foundry or road layer can take after testing" },
+        { "material_id": "aluminium_dross", "name": "De-drossing salt slag", "note": "hazardous handling; never left in the open yard" },
+        { "material_id": null, "name": "Magnetic separator fines and shredder light fraction", "note": "landfilled or co-processed; not modelled here" }
+      ],
+      "certifications": ["Hazardous Waste authorisation for dross and catalyst handling", "TNPSC Consent to Operate for the shredder line"],
+      "intake_note": "Radioactivity screen at the gate, and material with oil or coolant still on it is charged a disposal rate.",
+      "capability_summary": "Shearing, shredding, magnetic and eddy separation, melting furnaces and licensed handling."
+    },
+    "furniture_manufacturer": {
+      "label": "Furniture and wood products",
+      "products": ["Teak and acacia furniture", "Plywood and blockboard panels", "Upholstered seating components"],
+      "materials_required": [
+        { "material_id": "wood_waste", "name": "Clean timber offcuts", "note": "re-laminated into blockboard core" },
+        { "material_id": "sawdust", "name": "Sawdust and shavings", "note": "pressed into particleboard core and used as a binder extender" },
+        { "material_id": "textile_waste", "name": "Woven offcuts and foam scrap", "note": "shredded for upholstery filling and rag stock" }
+      ],
+      "byproducts": [
+        { "material_id": "sawdust", "name": "Sanding dust and saw blur", "note": "sold by the bag to brick makers and board plants" },
+        { "material_id": "wood_waste", "name": "End cuts and defective boards", "note": "clean stock, the easiest of the three to place" },
+        { "material_id": "textile_waste", "name": "Upholstery fabric and foam offcuts", "note": "foam is not textile - it goes out separately or is burned" },
+        { "material_id": "plastic_mixed", "name": "Edge banding and film wrap", "note": "PVC edge band is a nuisance fraction in the wood line" }
+      ],
+      "certifications": ["TNPSC Consent to Operate for the finishing line", "ISO 14001 environmental management at the larger units"],
+      "intake_note": "Wants dry, de-nailed timber; anything with concrete, screws or paint on it damages the knives.",
+      "capability_summary": "Cutting, panel pressing, die cutting and small-batch converting."
+    },
+    "waste_processor": {
+      "label": "Mixed waste processing",
+      "products": ["Sorted recyclable bales", "Refuse-derived fuel", "Processed inert aggregate"],
+      "materials_required": [
+        { "material_id": "plastic_mixed", "name": "Dry recyclable fraction", "note": "segregated by grade at the picking cabin" },
+        { "material_id": "food_processing_waste", "name": "Putrescible organics", "note": "diverted to the compost line before the fuel line" },
+        { "material_id": "concrete_waste", "name": "Mixed construction and demolition debris", "note": "crushed, screened, metal extracted" },
+        { "material_id": "ewaste", "name": "Small electrical and electronic items", "note": "segregated and handed to a licensed dismantler" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Inert rejects and dust from the trommel", "note": "landfilled at the operator's own cell" },
+        { "material_id": "plastic_mixed", "name": "Low-grade combustibles", "note": "the co-processing product cement kilns buy" },
+        { "material_id": "metal_scrap", "name": "Magnetic extract from C&D debris", "note": "sold straight to a metal recycler" }
+      ],
+      "certifications": ["Solid Waste Management Rules authorisation", "HSME/EPR aggregator registration where plastic credit is claimed"],
+      "intake_note": "A transfer station accepts mixed loads by design - what it charges for is the sorting you did not do.",
+      "capability_summary": "Screening, crushing, magnetic separation, baling and a transfer station."
+    },
+    "agriculture_farm": {
+      "label": "Farming and orchards",
+      "products": ["Paddy and millets", "Vegetables and leaf crops", "Green fodder and sugarcane"],
+      "materials_required": [
+        { "material_id": "green_waste", "name": "Composted green waste", "note": "organic matter for the top soil bank" },
+        { "material_id": "food_processing_waste", "name": "Processed organic residue", "note": "composted first; raw food waste invites vectors" },
+        { "material_id": "rice_husk_ash", "name": "Rice husk ash", "note": "silica-rich amendment for light soils" },
+        { "material_id": "phosphogypsum", "name": "Phosphogypsum", "note": "soil amendment for sodic soils - only with clearance, since it carries trace metals" }
+      ],
+      "byproducts": [
+        { "material_id": "rice_husk", "name": "Paddy husk from on-farm milling", "note": "bedding, fuel, or a biomass boiler feed" },
+        { "material_id": "green_waste", "name": "Straw, stover and prunings", "note": "burned far too often; a composting partner is the alternative" },
+        { "material_id": "rice_husk_ash", "name": "Husk ash from the boiler", "note": "a pozzolan if it is not allowed to sinter" }
+      ],
+      "certifications": ["Tamil Nadu organic farming registration where a claim is made", "No single-use plastic certificate for farm-pack produce"],
+      "intake_note": "Field access is the limit: a truck needs a hard approach road and a place to turn.",
+      "capability_summary": "Field application, composting pits and mulching; no testing and no processing line."
+    },
+    "artisan_sme": {
+      "label": "Artisan and small-scale craft units",
+      "products": ["Hand-thrown and slab pottery", "Terracotta and decorative tiles", "Reclaimed-wood and rattan furniture", "Natural-dye textiles"],
+      "materials_required": [
+        { "material_id": "marble_slurry", "name": "Stone and marble slurry", "note": "inlay paste and body extender for terracotta" },
+        { "material_id": "wood_waste", "name": "Reclaimed timber", "note": "the raw stock for upcycled furniture" },
+        { "material_id": "textile_waste", "name": "Cotton and silk offcuts", "note": "rag rugs, patchwork and natural-dye stock" },
+        { "material_id": "sawdust", "name": "Sawdust", "note": "kiln fuel and packing void-fill" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Bisque and kiln losses", "note": "crushed grog, reused in the next body - a small circular loop nobody sells" },
+        { "material_id": "sawdust", "name": "Sanding dust", "note": "bagged and sold to a brick maker" },
+        { "material_id": "textile_waste", "name": "Dye-bath and rag offcuts", "note": "natural fibres only; synthetic offcuts go out with mixed dry waste" }
+      ],
+      "certifications": ["Udyam registration", "Handloom mark or GI registration where the craft claims one"],
+      "intake_note": "Volume, not specification, is the constraint: an SME can take a good material but not a 40-tonne truck of it.",
+      "capability_summary": "Small-batch, hand processing, slip preparation and upcycling."
+    },
+    "community_programme": {
+      "label": "Community and institutional programmes",
+      "products": ["Neighbourhood compost and park manure", "Recycled-paper notebooks and craft kits", "Upcycled goods from a shramadan workshop"],
+      "materials_required": [
+        { "material_id": "green_waste", "name": "Park and garden waste", "note": "the raw material for a community pit" },
+        { "material_id": "food_processing_waste", "name": "Canteen and market organics", "note": "collected daily, composted weekly" },
+        { "material_id": "paper_waste", "name": "School and office paper", "note": "re-made into notebooks" },
+        { "material_id": "textile_waste", "name": "Household cloth", "note": "upcycled into bags and quilts" }
+      ],
+      "byproducts": [
+        { "material_id": "plastic_mixed", "name": "Mixed dry waste from the segregation drive", "note": "handed to the kabadiwala or the municipal collection" },
+        { "material_id": null, "name": "Compost oversize and glass", "note": "screened back into the pit; glass handed to the recycler" }
+      ],
+      "certifications": ["Ward-level SWM committee registration", "Tamil Nadu Panchayat liquid-waste and composting guidelines"],
+      "intake_note": "Anything a household can carry on a cycle; a programme has no weighbridge and no machinery.",
+      "capability_summary": "Community composting, hand sorting, upcycling and small-batch workshops."
+    },
+    "biogas_plant": {
+      "label": "Biogas and energy from organics",
+      "products": ["Biogas and compressed bio-gas", "Electricity from a gas engine", "Digestate slurry as a soil amendment"],
+      "materials_required": [
+        { "material_id": "food_processing_waste", "name": "High-strength food residue", "note": "the load the digester is sized for" },
+        { "material_id": "green_waste", "name": "Green and market waste", "note": "co-digested for carbon balance" },
+        { "material_id": "rice_husk", "name": "Rice husk", "note": "solid-state digested in some plants; mostly a fuel, not a feed" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Digestate and spent slurry", "note": "sold or given to farms as manure; a nutrient value rather than a waste" },
+        { "material_id": "lime_sludge", "name": "Scrubber lime sludge", "note": "from hydrogen-sulphide scrubbing; small volume, needs characterising" },
+        { "material_id": "plastic_mixed", "name": "Removed liner, plastic and packaging", "note": "picked out at the pre-processing pit" }
+      ],
+      "certifications": ["MNRE biogas programme registration", "TNPSC Consent to Operate for the gas engine"],
+      "intake_note": "Contamination is the whole problem: a load with plastic in it stops the plant, it does not slow it down.",
+      "capability_summary": "Pre-processing, in-vessel digestion, gas storage and engine generation."
+    },
+    "ewaste_processor": {
+      "label": "E-waste and circuit-board processing",
+      "products": ["Recovered copper granules", "Aluminium and copper ingots", "Reclaimed precious-metal concentrate"],
+      "materials_required": [
+        { "material_id": "ewaste", "name": "Discarded electrical and electronic equipment", "note": "dismantled, then shredded and density-separated" },
+        { "material_id": "spent_catalyst", "name": "Spent metal-bearing catalyst", "note": "same assay-and-custody route as a refinery feed" },
+        { "material_id": "copper_slag", "name": "Copper-bearing slag", "note": "prill recovery before the slag leaves as abrasive" },
+        { "material_id": "aluminium_dross", "name": "Aluminium dross", "note": "metal recovery, then the salt slag goes back to the generator" }
+      ],
+      "byproducts": [
+        { "material_id": "glass_waste", "name": "CRT and panel glass fraction", "note": "leaded glass is hazardous; soda-lime glass can go to a glass plant" },
+        { "material_id": "plastic_mixed", "name": "Cable and connector plastics", "note": "shredded and sold as mixed granules, never burned" },
+        { "material_id": null, "name": "Resin dust and laminate fines", "note": "the part nobody wants; held as hazardous waste pending disposal" }
+      ],
+      "certifications": ["E-Waste (Management) Rules authorisation", "Hazardous Waste authorisation for leaded glass and sludge", "ISO 14001 at the dismantling line"],
+      "intake_note": "Licensed transporter, manifest per consignment, and nothing enters the shed unpacked.",
+      "capability_summary": "Dismantling, shredding, magnetic and eddy separation, density separation and a laboratory."
+    },
+    "glass_manufacturing": {
+      "label": "Glass and fibreglass manufacturing",
+      "products": ["Container and sheet glass", "Fibreglass insulation roving", "Recycled glass aggregate and beads"],
+      "materials_required": [
+        { "material_id": "glass_waste", "name": "Cullet", "note": "the furnace eats cullet: less silica sand, less energy" },
+        { "material_id": "foundry_sand", "name": "Silica sand fractions", "note": "a silica source where the iron content is low enough" },
+        { "material_id": "bottom_ash", "name": "Ash with a usable silica-alumina split", "note": "tried in glass-ceramic bodies, needs a full assay first" }
+      ],
+      "byproducts": [
+        { "material_id": "glass_waste", "name": "Reject bottles, cullet fines and furnace glass", "note": "already sorted and clean - the best recycling loop in this dataset" },
+        { "material_id": null, "name": "Filter-bag dust and off-spec refractory", "note": "refractory demolition goes to a construction recycler" },
+        { "material_id": "concrete_waste", "name": "Furnace refractory demolition", "note": "inert after cooling; a fill material with a leach report" }
+      ],
+      "certifications": ["TNPSC Consent to Operate with a stack monitor", "BIS IS 3739 for container glass"],
+      "intake_note": "Colour-sorted, metal-free, no ceramics: a single piece of porcelain spoils a furnace batch.",
+      "capability_summary": "Melting furnace, emission controls, crushing and screening of the glass fraction."
+    },
+    "ceramic_tile_manufacturing": {
+      "label": "Ceramic and tile manufacturing",
+      "products": ["Vitrified floor tiles", "Wall and kitchen tiles", "Sanitaryware"],
+      "materials_required": [
+        { "material_id": "marble_slurry", "name": "Marble and stone slurry", "note": "filler in the tile body, dewatered before it enters the mill" },
+        { "material_id": "foundry_sand", "name": "Silica and foundry sand", "note": "body aggregate where the iron level allows" },
+        { "material_id": "bottom_ash", "name": "Coal ash from neighbouring plants", "note": "a long-standing additive in the tile body where it is low-carbon" },
+        { "material_id": "lime_sludge", "name": "Neutralisation sludge", "note": "spray-drier feed for the low-grade body only" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Broken tiles and green bisque rejects", "note": "a real ceramic-waste stream that the knowledge base does not yet model" },
+        { "material_id": null, "name": "Glaze and slip slurry", "note": "filter-pressed and re-blued into the next batch" },
+        { "material_id": "cardboard", "name": "Tile cartons and corner protectors", "note": "clean fibre, sold by the bale" }
+      ],
+      "certifications": ["BIS IS 15682 for vitrified tiles", "TNPSC Consent to Operate for the glaze line"],
+      "intake_note": "Anything with a fluoride or lead load in it is refused: it would end up in the glaze.",
+      "capability_summary": "Slip preparation, pressing, drying, glazing and firing; can accept filter cakes, not slurries."
+    },
+    "adsorbent_manufacturer": {
+      "label": "Adsorbent and filter media manufacturing",
+      "products": ["Activated carbon granules and powder", "Silica and slag-based adsorbents", "Industrial spill absorbent pads"],
+      "materials_required": [
+        { "material_id": "rice_husk_ash", "name": "Rice husk ash", "note": "the silica source for precipitated silica and adsorbent carriers" },
+        { "material_id": "sawdust", "name": "Coconut-shell and sawdust carbon", "note": "carbonised and steam-activated into granular carbon" },
+        { "material_id": "bottom_ash", "name": "Ash with a high surface silica", "note": "trial feedstock for low-cost media" },
+        { "material_id": "spent_catalyst", "name": "Spent catalyst and loaded carbon", "note": "reactivated or re-metal-extracted under licence" }
+      ],
+      "byproducts": [
+        { "material_id": null, "name": "Activated fines and dust from the classifier", "note": "agglomerated back into pelletised media" },
+        { "material_id": "lime_sludge", "name": "Acid and caustic wash sludge", "note": "neutralised on site; the cake needs a metals report before it leaves" },
+        { "material_id": "bagasse_ash", "name": "Activation furnace ash", "note": "pozzolan, sold onward to a cement mill" }
+      ],
+      "certifications": ["TNPSC Consent to Operate for acid contact", "NSF/ANSI 61 where media touches drinking water"],
+      "intake_note": "Small tonnages, tight specifications: a load without an assay does not enter the store.",
+      "capability_summary": "Milling, activation, pelletising and a laboratory for iodine and abrasion numbers."
+    },
+    "energy_plant": {
+      "label": "Power and energy generation",
+      "products": ["Grid electricity", "Process steam for industrial parks", "Recovered coal and biomass ash as a by-product"],
+      "materials_required": [
+        { "material_id": "rice_husk", "name": "Rice husk", "note": "co-fired in biomass units and dedicated husk boilers" },
+        { "material_id": "sawdust", "name": "Biomass and wood residues", "note": "densified or direct-fired in a dedicated boiler" },
+        { "material_id": "plastic_mixed", "name": "Refuse-derived fuel", "note": "co-processed in a kiln or a dedicated CFBC unit, never in a municipal boiler" },
+        { "material_id": "food_processing_waste", "name": "Biogas from captive digester", "note": "engine fuel; the feedstock is not bought" }
+      ],
+      "byproducts": [
+        { "material_id": "fly_ash", "name": "Pulverised fuel ash", "note": "the founding symbiosis stream of this dataset" },
+        { "material_id": "bottom_ash", "name": "Bottom and grate ash", "note": "sold after cooling and metal extraction" },
+        { "material_id": "lime_sludge", "name": "Flue-gas desulphurisation gypsum and lime sludge", "note": "a gypsum substitute for cement when chloride stays low" },
+        { "material_id": "spent_catalyst", "name": "SCR denitration catalyst", "note": "hazardous: licensed disposal or metal recovery, never site landfill" },
+        { "material_id": null, "name": "Washed coal rejects and topsoil stockpiles", "note": "burned in the CFB or used as mine fill; the knowledge base does not model coal rejects" }
+      ],
+      "certifications": ["Central Electricity Authority ash-utilisation norms", "CERC/PERTAD generation licence", "TNPASS Consent to Operate with continuous stack monitoring"],
+      "intake_note": "Everything arrives on a rail or a dedicated haul road; fuel intake is metered and quality-tested per rake.",
+      "capability_summary": "Boiler and mill operation, emission controls, transfer station and a coal-quality laboratory."
+    }
+  }
+}

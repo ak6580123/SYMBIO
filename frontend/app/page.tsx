@@ -1,165 +1,257 @@
 import Link from 'next/link';
 
-import { DemoTag, Panel } from '@/components/ui';
+import { SymbioButton, Section } from '@/components/ui';
 import { api } from '@/lib/api';
-import { inr, pct } from '@/lib/format';
-import type { DashboardData, HealthData } from '@/lib/types';
+import { inr, pct, distanceShort } from '@/lib/format';
 
 export const dynamic = 'force-dynamic';
 
-const FLOW = [
-  { step: '01', title: 'Waste source', body: 'Industry, household, SME, agriculture — any generator.' },
-  { step: '02', title: 'AI identification', body: 'A local model reads the messy description and names the material.' },
-  { step: '03', title: 'Material knowledge base', body: 'Properties, reuse routes, compatible sectors, hazards.' },
-  { step: '04', title: 'Deterministic matching', body: 'Scores compatibility, quantity, distance, sector, value, impact.' },
-  { step: '05', title: 'Ranked opportunities', body: 'Every match explains exactly why it was recommended.' },
-  { step: '06', title: 'Circular flow', body: 'Economic value and avoided emissions, mapped end to end.' },
-];
-
+/**
+ * The homepage has one job: say what Symbio does in one line, show that it is
+ * working on real material, and hand the reader to the analyzer. The pipeline and
+ * the scoring model are here too, because a reader deciding whether to trust a
+ * match should be able to see how it was made without opening four pages - but
+ * they are set as prose and a table, not as a wall of feature cards.
+ */
 export default async function Home() {
-  let dashboard: DashboardData | null = null;
-  let health: HealthData | null = null;
-  let error: string | null = null;
+  let streams: Awaited<ReturnType<typeof api.dashboard>>['recent_analyses'] = [];
+  let impact: Awaited<ReturnType<typeof api.dashboard>>['impact'] | null = null;
+  let materials = 0;
+  let partners = 0;
+  let offline = false;
 
   try {
-    [dashboard, health] = await Promise.all([api.dashboard(), api.health()]);
-  } catch (err) {
-    error = err instanceof Error ? err.message : 'Backend unreachable';
+    const [dashboard, health] = await Promise.all([api.dashboard(), api.health()]);
+    streams = dashboard.recent_analyses;
+    impact = dashboard.impact;
+    materials = health.materials;
+    partners = health.recipients;
+  } catch {
+    // The homepage must still render and still offer the way in, so the failure is
+    // reported once, plainly, and the analysis service is not described to the user.
+    offline = true;
   }
 
-  const impact = dashboard?.impact;
-  const seeded = dashboard?.recent_analyses.find((a) => a.material === 'Fly Ash');
-
   return (
-    <div className="space-y-8">
-      {/* Hero */}
-      <section className="panel overflow-hidden">
-        <div className="grid gap-8 p-8 lg:grid-cols-[1.15fr_1fr] lg:p-10">
-          <div>
-            <div className="mb-4 flex items-center gap-2">
-              <DemoTag />
-              <span className="chip border-ink-600 bg-ink-800 text-slate-400">Circular economy matchmaking</span>
-            </div>
-            <h1 className="text-3xl font-semibold leading-tight tracking-tight text-slate-50 sm:text-4xl">
-              Your waste is somebody else&apos;s raw material.
-              <span className="block text-slate-400">Symbio finds out who.</span>
-            </h1>
-            <p className="mt-4 max-w-xl text-sm leading-relaxed text-slate-400">
-              Describe a waste stream in plain language. Symbio identifies the material, looks it up in a knowledge
-              base of reuse routes, and ranks the companies, recyclers, farms and community programmes that could
-              actually use it — with an explainable score for every match.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Link href="/analyze" className="btn-primary">
-                Analyze Waste
-              </Link>
-              {seeded && (
-                <Link href={`/matches/${seeded.top_match?.match_id ?? ''}`} className="btn-ghost">
-                  See the fly ash demo
-                </Link>
-              )}
-            </div>
-            <p className="mt-4 text-[11px] text-slate-600">
-              No account, no API keys. Runs entirely on local demo data.
-            </p>
-          </div>
+    <div className="space-y-section">
+      <Hero streams={streams} offline={offline} />
 
-          <div className="rounded-lg border border-ink-700 bg-ink-900 p-5">
-            <p className="label mb-3">Live from the demo dataset</p>
-            {error ? (
-              <p className="text-xs leading-relaxed text-rose-300">
-                {error}
-                <br />
-                <span className="text-slate-500">Start the FastAPI backend on port 8000 (see README).</span>
-              </p>
-            ) : (
-              <dl className="grid grid-cols-2 gap-4">
-                <Stat label="Materials known" value={String(health?.materials ?? '—')} />
-                <Stat label="Potential recipients" value={String(health?.recipients ?? '—')} />
-                <Stat label="Waste analyzed" value={`${impact?.tonnes_analysed ?? 0} t/mo`} />
-                <Stat label="Potential diversion" value={`${impact?.tonnes_diverted ?? 0} t/mo`} accent />
-                <Stat label="Potential matches" value={String(impact?.potential_matches ?? 0)} />
-                <Stat label="Est. value" value={inr(impact?.estimated_value_inr_per_month ?? 0)} />
-                <Stat label="Est. CO₂e avoided" value={`${impact?.estimated_co2e_t_per_month ?? 0} t/mo`} accent />
-                <Stat label="Est. diversion rate" value={pct(impact?.diversion_rate ?? 0)} />
-              </dl>
-            )}
-            <p className="mt-4 border-t border-ink-700 pt-3 text-[11px] leading-relaxed text-slate-600">
-              Values are demo calculations from seeded factors, not certified figures.
-            </p>
-          </div>
-        </div>
-      </section>
+      <Facts materials={materials} partners={partners} impact={impact} offline={offline} />
 
-      {/* Flow */}
-      <section>
-        <div className="mb-3 flex items-baseline justify-between">
-          <h2 className="text-sm font-semibold text-slate-200">How a match is made</h2>
-          <span className="text-[11px] text-slate-600">The language model never sets a score</span>
-        </div>
-        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {FLOW.map((item) => (
-            <li key={item.step} className="panel panel-pad">
-              <span className="font-mono text-[11px] text-accent">{item.step}</span>
-              <p className="mt-1 text-sm font-medium text-slate-200">{item.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-slate-500">{item.body}</p>
+      <Section title="How a match is made" subtitle="Four steps, and only one of them is a model.">
+        <ol className="grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            ['Describe the stream', 'What it is, how much, how often, where. Plain language or an upload.'],
+            ['Identify the material', 'A local model names it against the knowledge base, and you can correct it.'],
+            ['Match it to the network', 'A deterministic engine scores compatibility, quantity, distance, value and impact.'],
+            ['Read the reason', 'Every match shows the arithmetic, the freight burden and what the safety layer allowed.'],
+          ].map(([title, body], index) => (
+            <li key={title} className="border-t border-line pt-2.5">
+              <p className="tag-label">Step {index + 1}</p>
+              <p className="mt-1 text-[14px] font-semibold leading-snug text-text-strong">{title}</p>
+              <p className="mt-1 text-[12.5px] leading-relaxed text-text-muted">{body}</p>
             </li>
           ))}
         </ol>
-      </section>
+      </Section>
 
-      {/* Scoring transparency */}
-      <Panel
-        title="The score, in full"
-        action={<span className="text-[11px] text-slate-500">deterministic · auditable</span>}
-      >
-        <p className="mb-4 text-xs leading-relaxed text-slate-500">
-          Every match score is a weighted sum of six components computed from the knowledge base and the source&apos;s
-          quantity, location and sector. The same input always produces the same score.
+      <Scoring />
+
+      {offline && (
+        <p className="text-[12.5px] leading-relaxed text-text-faint">
+          The figures above need the analysis service, which is not answering right now. Everything else on this page
+          still describes how the product works.
         </p>
-        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {[
-            ['Material compatibility', 30],
-            ['Quantity fit', 20],
-            ['Distance', 15],
-            ['Sector fit', 15],
-            ['Economic value', 10],
-            ['Environmental benefit', 10],
-          ].map(([label, weight]) => (
-            <div key={String(label)} className="rounded-md border border-ink-700 bg-ink-900 p-3">
-              <p className="text-lg font-semibold tabular-nums text-accent">{weight}%</p>
-              <p className="mt-0.5 text-[11px] leading-tight text-slate-500">{label}</p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <div className="rounded-md border border-ink-700 bg-ink-900 p-3">
-            <p className="text-xs font-medium text-slate-300">What the model does</p>
-            <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
-              Reads your description, names the material, gives a confidence, suggests candidate reuse categories. Its
-              output is validated against the knowledge base and can only narrow the options.
-            </p>
-          </div>
-          <div className="rounded-md border border-ink-700 bg-ink-900 p-3">
-            <p className="text-xs font-medium text-slate-300">What the model cannot do</p>
-            <p className="mt-1 text-[11px] leading-relaxed text-slate-500">
-              Invent companies, prices, emission figures or safety verdicts. Hazardous and unidentified streams are
-              blocked from household, farm and artisan routes by a rule-based safety layer.
-            </p>
-          </div>
-        </div>
-      </Panel>
+      )}
     </div>
   );
 }
 
-function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
+/* -------------------------------------------------------------------------- */
+
+function Hero({
+  streams,
+  offline,
+}: {
+  streams: Awaited<ReturnType<typeof api.dashboard>>['recent_analyses'];
+  offline: boolean;
+}) {
+  const shown = streams.slice(0, 3);
   return (
-    <div>
-      <dt className="label">{label}</dt>
-      <dd className={`mt-0.5 text-lg font-semibold tabular-nums ${accent ? 'text-accent' : 'text-slate-100'}`}>
-        {value}
-      </dd>
-    </div>
+    <section className="grid items-center gap-10 py-4 lg:grid-cols-[1.05fr_1fr] lg:py-8">
+      <div>
+        <p className="text-[13px] font-semibold uppercase tracking-[0.42em] text-brand-strong">Symbio</p>
+        <h1 className="mt-4 max-w-[18ch] text-[38px] font-semibold leading-[1.04] tracking-[-0.02em] text-text-strong sm:text-[52px]">
+          Find the next best use for your material.
+        </h1>
+        <p className="page-subtitle mt-5 text-[15px]">
+          Describe a waste stream once. Symbio identifies the material, ranks who can actually take it, and shows the
+          distance, the freight burden and the reasoning behind every line.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <SymbioButton variant="hero" href="/analyze">
+            Analyze a material
+          </SymbioButton>
+          <Link href="/map" className="btn-ghost btn-lg">
+            Explore the network
+          </Link>
+        </div>
+      </div>
+
+      {/* The product, drawn once: a stream on the left, what Symbio did to it in the
+          middle, the next use on the right. The rows are live records - if nothing
+          has been analysed, the visual says so rather than showing a stock example. */}
+      <div className="rounded-card border border-line bg-surface px-5 py-5">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="tag-label">Waste</p>
+          <p className="tag-label text-center">Symbio</p>
+          <p className="tag-label text-right">Next use</p>
+        </div>
+
+        {shown.length === 0 ? (
+          <p className="py-8 text-center text-[12.5px] leading-relaxed text-text-faint">
+            {offline
+              ? 'The analysis service is not answering, so there is nothing to show yet.'
+              : 'No material stream has been analysed yet. The first one appears here.'}
+          </p>
+        ) : (
+          <ul className="mt-3 space-y-2.5">
+            {shown.map((stream) => (
+              <li key={stream.id} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-t border-line pt-2.5">
+                <span className="min-w-0">
+                  <span className="block truncate text-[13px] font-medium text-text-strong">{stream.material}</span>
+                  <span className="block text-[11px] tabular-nums text-text-faint">
+                    {stream.quantity_t_per_month} t/mo · {stream.location}
+                  </span>
+                </span>
+                <span aria-hidden className="px-1 text-[13px] text-brand-strong">
+                  →
+                </span>
+                <span className="min-w-0 text-right">
+                  {stream.top_match ? (
+                    <>
+                      <Link
+                        href={`/matches/${stream.top_match.match_id}`}
+                        className="block truncate text-[13px] font-medium text-text-strong hover:underline"
+                      >
+                        {stream.top_match.company_name}
+                      </Link>
+                      <span className="block text-[11px] tabular-nums text-text-faint">
+                        {stream.top_match.score.toFixed(0)} match · {distanceShort(stream.top_match.distance_km)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-[11px] leading-snug text-text-faint">
+                      No partner can take this stream as it stands.
+                    </span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <p className="mt-4 border-t border-line pt-3 text-[11px] leading-relaxed text-text-faint">
+          {shown.length > 0 && (
+            <>
+              {streams.length} stream{streams.length === 1 ? '' : 's'} in the network right now.{' '}
+            </>
+          )}
+          Scores are computed by the matching engine; the model identifies the material and never ranks a partner.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/** One row of the numbers that describe the network. Not cards - a row. */
+function Facts({
+  materials,
+  partners,
+  impact,
+  offline,
+}: {
+  materials: number;
+  partners: number;
+  impact: Awaited<ReturnType<typeof api.dashboard>>['impact'] | null;
+  offline: boolean;
+}) {
+  const items: [string, string][] = [
+    ['Materials known', offline ? '—' : String(materials)],
+    ['Partners who can take something', offline ? '—' : String(partners)],
+    ['Stream analysed', impact ? `${impact.tonnes_analysed} t/mo` : '—'],
+    ['Diverted through a match', impact ? `${impact.tonnes_diverted} t/mo` : '—'],
+    ['Estimated value', impact ? `${inr(impact.estimated_value_inr_per_month)}/mo` : '—'],
+    ['Estimated CO₂e avoided', impact ? `${impact.estimated_co2e_t_per_month} t/mo` : '—'],
+    ['Diversion rate', impact ? pct(impact.diversion_rate) : '—'],
+  ];
+  return (
+    <dl className="grid gap-x-8 gap-y-4 border-y border-line py-5 sm:grid-cols-2 lg:grid-cols-4">
+      {items.map(([label, value]) => (
+        <div key={label}>
+          <dt className="label">{label}</dt>
+          <dd className="stat mt-1.5">{value}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
+/**
+ * The scoring model, stated as a table rather than as six tiles: what each
+ * component is worth, and the two sentences about the model that a reader
+ * actually needs before trusting a number.
+ */
+function Scoring() {
+  const weights: [string, number][] = [
+    ['Material compatibility', 30],
+    ['Quantity fit', 20],
+    ['Distance', 15],
+    ['Sector fit', 15],
+    ['Economic value', 10],
+    ['Environmental benefit', 10],
+  ];
+  return (
+    <Section
+      title="Why a score means something"
+      subtitle="A match score is a weighted sum of six components, computed from the knowledge base and the stated quantity, location and sector. The same input always gives the same score."
+    >
+      <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr]">
+        <ul className="space-y-2">
+          {weights.map(([label, weight]) => (
+            <li key={label} className="grid grid-cols-[minmax(0,1fr)_120px_3ch] items-center gap-3 text-[12.5px]">
+              <span className="text-text">{label}</span>
+              <span className="h-1.5 overflow-hidden rounded-full bg-surface-muted">
+                <span className="block h-full rounded-full bg-brand" style={{ width: `${(weight / 30) * 100}%` }} />
+              </span>
+              <span className="text-right tabular-nums text-text-faint">{weight}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="space-y-4">
+          <div>
+            <p className="text-[13px] font-semibold text-text-strong">What the model does</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-text-muted">
+              Reads the description, names the material, reports a confidence and proposes candidate reuse routes. Its
+              output is checked against the knowledge base, so it can only narrow what exists.
+            </p>
+          </div>
+          <div>
+            <p className="text-[13px] font-semibold text-text-strong">What it cannot do</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-text-muted">
+              Invent a partner, a price, an emission figure or a safety verdict. Hazardous and unidentified streams are
+              held back from household, farm and artisan routes by a rule-based safety layer that outranks similarity.
+            </p>
+          </div>
+          <div>
+            <p className="text-[13px] font-semibold text-text-strong">What an estimate is</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-text-muted">
+              Value and CO₂e are computed from recorded prices and avoidance factors. They are estimates for comparing
+              options, not quotations, invoices or certified figures.
+            </p>
+          </div>
+        </div>
+      </div>
+    </Section>
   );
 }
