@@ -1,0 +1,131 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+    {"id":"color-ground","type":"color","label":"Background","default":"#EEF3EA"},
+    {"id":"color-card","type":"color","label":"Card surface","default":"#E7EFE2"},
+    {"id":"color-ink","type":"color","label":"Text strong","default":"#101F24"},
+    {"id":"color-ink-muted","type":"color","label":"Text body","default":"#1B2E34"},
+    {"id":"color-ink-faint","type":"color","label":"Text faint","default":"#4E6570"},
+    {"id":"color-accent-fill","type":"color","label":"Accent fill (amber)","default":"#F1E379"},
+    {"id":"color-accent-ink","type":"color","label":"Accent text (amber)","default":"#6E5E06"},
+    {"id":"color-teal-fill","type":"color","label":"Teal fill","default":"#87BBA2"},
+    {"id":"color-teal-ink","type":"color","label":"Teal text","default":"#2F6B54"},
+    {"id":"color-cherry","type":"color","label":"Cherry (danger)","default":"#500303"},
+    {"id":"font-display","type":"string","label":"Display font","default":"Playfair Display"},
+    {"id":"font-body","type":"string","label":"Body font","default":"Inter"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--color-ground);
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+      .scene-host {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="146"
+      data-width="1920"
+      data-height="1080"
+      data-motion-blur="on"
+    >
+      <div id="scene1-hook" class="scene-host" data-composition-id="scene1-hook" data-composition-src="compositions/scene1-hook.html" data-start="0" data-duration="10" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene2-brand" class="scene-host" data-composition-id="scene2-brand" data-composition-src="compositions/scene2-brand.html" data-start="10" data-duration="10" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene3-pipeline" class="scene-host" data-composition-id="scene3-pipeline" data-composition-src="compositions/scene3-pipeline.html" data-start="20" data-duration="18" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene4-rule" class="scene-host" data-composition-id="scene4-rule" data-composition-src="compositions/scene4-rule.html" data-start="38" data-duration="14" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene5-entry" class="scene-host" data-composition-id="scene5-entry" data-composition-src="compositions/scene5-entry.html" data-start="52" data-duration="14" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene6-id" class="scene-host" data-composition-id="scene6-id" data-composition-src="compositions/scene6-id.html" data-start="66" data-duration="14" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene7-match" class="scene-host" data-composition-id="scene7-match" data-composition-src="compositions/scene7-match.html" data-start="80" data-duration="16" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene8-score" class="scene-host" data-composition-id="scene8-score" data-composition-src="compositions/scene8-score.html" data-start="96" data-duration="16" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene9-safety" class="scene-host" data-composition-id="scene9-safety" data-composition-src="compositions/scene9-safety.html" data-start="112" data-duration="12" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene10-scale" class="scene-host" data-composition-id="scene10-scale" data-composition-src="compositions/scene10-scale.html" data-start="124" data-duration="10" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="scene11-outro" class="scene-host" data-composition-id="scene11-outro" data-composition-src="compositions/scene11-outro.html" data-start="134" data-duration="12" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+
+      <audio id="bg-music" class="clip" data-start="0" data-duration="146" data-track-index="10" data-volume="1" data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":0},{"t":1.5,"v":0.1},{"t":8,"v":0.1},{"t":10,"v":0.22},{"t":36,"v":0.22},{"t":38,"v":0.32},{"t":51,"v":0.32},{"t":52,"v":0.22},{"t":79,"v":0.22},{"t":80,"v":0.33},{"t":95,"v":0.33},{"t":96,"v":0.22},{"t":111,"v":0.22},{"t":112,"v":0.18},{"t":123,"v":0.18},{"t":124,"v":0.22},{"t":134,"v":0.14},{"t":142,"v":0.03},{"t":146,"v":0}]}]}' src="assets/music/happy-beats-business-moves-vol-12-by-ende-dot-app.mp3"></audio>
+
+      <!-- Scene 2: wordmark arrival -->
+      <audio id="sfx-2-1" class="clip" data-start="10.3" data-duration="0.8" data-track-index="11" data-volume="0.5" src="assets/sfx/interface/drop_001.ogg"></audio>
+
+      <!-- Scene 3: pipeline node ticks -->
+      <audio id="sfx-3-1" class="clip" data-start="20.3" data-duration="0.6" data-track-index="11" data-volume="0.32" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-3-2" class="clip" data-start="22.2" data-duration="0.6" data-track-index="11" data-volume="0.32" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-3-3" class="clip" data-start="24.1" data-duration="0.6" data-track-index="11" data-volume="0.32" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-3-4" class="clip" data-start="26.0" data-duration="0.6" data-track-index="11" data-volume="0.32" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-3-5" class="clip" data-start="27.9" data-duration="0.6" data-track-index="11" data-volume="0.32" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-3-6" class="clip" data-start="29.8" data-duration="0.6" data-track-index="11" data-volume="0.32" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-3-7" class="clip" data-start="31.7" data-duration="0.6" data-track-index="11" data-volume="0.32" src="assets/sfx/interface/drop_001.ogg"></audio>
+
+      <!-- Scene 4: the two-row split -->
+      <audio id="sfx-4-1" class="clip" data-start="44.0" data-duration="0.6" data-track-index="11" data-volume="0.28" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-4-2" class="clip" data-start="45.6" data-duration="0.6" data-track-index="11" data-volume="0.28" src="assets/sfx/interface/drop_001.ogg"></audio>
+
+      <!-- Scene 5: simulated clicks -->
+      <audio id="sfx-5-1" class="clip" data-start="54.5" data-duration="0.5" data-track-index="11" data-volume="0.45" src="assets/sfx/ui/click2.ogg"></audio>
+      <audio id="sfx-5-2" class="clip" data-start="58.9" data-duration="0.5" data-track-index="11" data-volume="0.45" src="assets/sfx/ui/click2.ogg"></audio>
+
+      <!-- Scene 6: composition fields -->
+      <audio id="sfx-6-1" class="clip" data-start="68.0" data-duration="0.5" data-track-index="11" data-volume="0.28" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-6-2" class="clip" data-start="69.3" data-duration="0.5" data-track-index="11" data-volume="0.28" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-6-3" class="clip" data-start="70.6" data-duration="0.5" data-track-index="11" data-volume="0.28" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-6-4" class="clip" data-start="71.9" data-duration="0.5" data-track-index="11" data-volume="0.28" src="assets/sfx/interface/drop_001.ogg"></audio>
+
+      <!-- Scene 7: match card chime + pathway ticks -->
+      <audio id="sfx-7-0" class="clip" data-start="81.0" data-duration="1.1" data-track-index="11" data-volume="0.6" src="assets/sfx/interface/bong_001.ogg"></audio>
+      <audio id="sfx-7-1" class="clip" data-start="85.6" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-7-2" class="clip" data-start="87.0" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-7-3" class="clip" data-start="88.4" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-7-4" class="clip" data-start="89.8" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-7-5" class="clip" data-start="91.2" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+
+      <!-- Scene 8: score bars -->
+      <audio id="sfx-8-1" class="clip" data-start="97.4" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-8-2" class="clip" data-start="99.6" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-8-3" class="clip" data-start="101.8" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-8-4" class="clip" data-start="104.0" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-8-5" class="clip" data-start="106.2" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-8-6" class="clip" data-start="108.4" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+
+      <!-- Scene 9: safety layer -->
+      <audio id="sfx-9-0" class="clip" data-start="112.3" data-duration="0.9" data-track-index="11" data-volume="0.4" src="assets/sfx/impact/impactSoft_medium_002.ogg"></audio>
+      <audio id="sfx-9-1" class="clip" data-start="115.2" data-duration="0.5" data-track-index="11" data-volume="0.25" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-9-2" class="clip" data-start="116.5" data-duration="0.5" data-track-index="11" data-volume="0.25" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-9-3" class="clip" data-start="117.8" data-duration="0.5" data-track-index="11" data-volume="0.25" src="assets/sfx/interface/drop_001.ogg"></audio>
+
+      <!-- Scene 10: scale figures -->
+      <audio id="sfx-10-1" class="clip" data-start="124.5" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-10-2" class="clip" data-start="125.4" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-10-3" class="clip" data-start="126.3" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+      <audio id="sfx-10-4" class="clip" data-start="127.2" data-duration="0.5" data-track-index="11" data-volume="0.3" src="assets/sfx/interface/drop_001.ogg"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

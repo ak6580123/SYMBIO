@@ -1,0 +1,51 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #scene10-row {
+      display: flex;
+      gap: 84px;
+    }
+    .scene10-stat {
+      text-align: center;
+      opacity: 0;
+    }
+    .scene10-stat .value {
+      font-family: var(--font-display), serif;
+      font-weight: 600;
+      font-size: 72px;
+      color: var(--color-ink);
+    }
+    .scene10-stat .label {
+      margin-top: 12px;
+      font-family: var(--font-body), sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.02em;
+      color: var(--color-ink-faint);
+      max-width: 260px;
+    }
+  </style>
+  <div id="root" data-composition-id="scene10-scale" data-width="1920" data-height="1080">
+    <div id="scene10-row">
+      <div class="scene10-stat" id="stat-1"><div class="value">29</div><div class="label">Materials known</div></div>
+      <div class="scene10-stat" id="stat-2"><div class="value">40</div><div class="label">Partners who can take something</div></div>
+      <div class="scene10-stat" id="stat-3"><div class="value">15</div><div class="label">Seeded sources</div></div>
+      <div class="scene10-stat" id="stat-4"><div class="value">19</div><div class="label">Seeded listings</div></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.to("#stat-1", { opacity: 1, duration: 0.4, ease: "power3.out" }, 0.5)
+      .to("#stat-2", { opacity: 1, duration: 0.4, ease: "power3.out" }, 1.4)
+      .to("#stat-3", { opacity: 1, duration: 0.4, ease: "power3.out" }, 2.3)
+      .to("#stat-4", { opacity: 1, duration: 0.4, ease: "power3.out" }, 3.2)
+      .to("#scene10-row", { opacity: 0, duration: 0.6, ease: "power2.in" }, 9.1);
+    window.__timelines["scene10-scale"] = tl;
+  </script>
+</template>

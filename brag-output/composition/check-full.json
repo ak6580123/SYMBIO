@@ -1,0 +1,1819 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "filesScanned": 12
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 37,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"bg-music\" is 117.36s but its slot (data-duration) is 146.00s — the slot is shortened to the media length when rendered. Set data-duration to ~117.36s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-2-1\" is 0.11s but its slot (data-duration) is 0.80s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3-1\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3-2\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3-3\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3-4\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3-5\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3-6\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-3-7\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-4-1\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-4-2\" is 0.11s but its slot (data-duration) is 0.60s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-5-1\" is 0.06s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.06s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-5-2\" is 0.06s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.06s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-6-1\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-6-2\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-6-3\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-6-4\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-7-0\" is 0.12s but its slot (data-duration) is 1.10s — the slot is shortened to the media length when rendered. Set data-duration to ~0.12s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-7-1\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-7-2\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-7-3\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-7-4\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-7-5\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-8-1\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-8-2\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-8-3\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-8-4\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-8-5\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-8-6\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-9-0\" is 0.14s but its slot (data-duration) is 0.90s — the slot is shortened to the media length when rendered. Set data-duration to ~0.14s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-9-1\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-9-2\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-9-3\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-10-1\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-10-2\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-10-3\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      },
+      {
+        "code": "clip_media_fit",
+        "severity": "warning",
+        "message": "Audio \"sfx-10-4\" is 0.11s but its slot (data-duration) is 0.50s — the slot is shortened to the media length when rendered. Set data-duration to ~0.11s if that isn't intended.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {
+          "data-composition-id": "main",
+          "data-start": "0",
+          "data-duration": "146",
+          "data-width": "1920",
+          "data-height": "1080",
+          "data-motion-blur": "on"
+        },
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1080
+        },
+        "time": 0
+      }
+    ]
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "duration": 146,
+    "samples": [
+      8.111,
+      24.333,
+      40.556,
+      56.778,
+      73,
+      89.222,
+      105.444,
+      121.667,
+      137.889
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 0,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      8.111,
+      40.556,
+      73,
+      105.444,
+      137.889
+    ],
+    "checked": 27,
+    "passed": 27
+  },
+  "craft": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 24,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "first_frame_empty",
+        "severity": "warning",
+        "message": "Frame 0 shows only the background, and the first frame is the thumbnail on social players: have the title or key image already on screen at 0 s instead of entering from nothing; see references/review.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 8.04 s (0.97–9.02 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0.975,
+        "seconds": 8.043,
+        "floorSeconds": 3,
+        "until": 9.018
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and \"Symbio\" renders at 26 px for 9.26 s: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Symbio",
+        "selector": "#scene2-eyebrow",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene2-brand.html",
+        "bbox": {
+          "x": 875.23,
+          "y": 479.3,
+          "width": 169.54,
+          "height": 31
+        },
+        "time": 10.481,
+        "times": [
+          10.481
+        ],
+        "fontPx": 26,
+        "floorPx": 28,
+        "seconds": 9.262,
+        "elements": [
+          {
+            "selector": "#scene2-eyebrow",
+            "text": "Symbio",
+            "fontPx": 26,
+            "time": 10.481,
+            "seconds": 9.262
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 7.07 s (11.94–19.01 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 11.943,
+        "seconds": 7.069,
+        "floorSeconds": 3,
+        "until": 19.012
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 7 text elements stay under it for 0.5 s or more, the smallest \"01\" at 18 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "01",
+        "selector": "#badge-1",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene3-pipeline.html",
+        "bbox": {
+          "x": 482,
+          "y": 199.5,
+          "width": 20,
+          "height": 21
+        },
+        "time": 20.474,
+        "times": [
+          20.474,
+          22.424,
+          24.374,
+          26.08,
+          28.03,
+          29.98,
+          31.93
+        ],
+        "fontPx": 18,
+        "floorPx": 28,
+        "seconds": 17.55,
+        "elements": [
+          {
+            "selector": "#badge-1",
+            "text": "01",
+            "fontPx": 18,
+            "time": 20.474,
+            "seconds": 17.55
+          },
+          {
+            "selector": "#badge-2",
+            "text": "02",
+            "fontPx": 18,
+            "time": 22.424,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#badge-3",
+            "text": "03",
+            "fontPx": 18,
+            "time": 24.374,
+            "seconds": 13.65
+          },
+          {
+            "selector": "#badge-4",
+            "text": "04",
+            "fontPx": 18,
+            "time": 26.08,
+            "seconds": 11.944
+          },
+          {
+            "selector": "#badge-5",
+            "text": "05",
+            "fontPx": 18,
+            "time": 28.03,
+            "seconds": 9.994
+          },
+          {
+            "selector": "#badge-6",
+            "text": "06",
+            "fontPx": 18,
+            "time": 29.98,
+            "seconds": 8.044
+          },
+          {
+            "selector": "#badge-7",
+            "text": "07",
+            "fontPx": 18,
+            "time": 31.93,
+            "seconds": 6.094
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 5.12 s (32.17–37.29 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 32.174,
+        "seconds": 5.118,
+        "floorSeconds": 3,
+        "until": 37.292
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 4.14 s (39.00–43.14 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 38.998,
+        "seconds": 4.144,
+        "floorSeconds": 3,
+        "until": 43.142
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 2 text elements stay under it for 0.5 s or more, the smallest \"Model\" at 14 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Model",
+        "selector": "#row-1 > span:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene4-rule.html",
+        "bbox": {
+          "x": 617.5,
+          "y": 773,
+          "width": 58,
+          "height": 17
+        },
+        "time": 44.117,
+        "times": [
+          44.117,
+          45.823
+        ],
+        "fontPx": 14,
+        "floorPx": 28,
+        "seconds": 7.556,
+        "elements": [
+          {
+            "selector": "#row-1 > span:nth-of-type(1)",
+            "text": "Model",
+            "fontPx": 14,
+            "time": 44.117,
+            "seconds": 7.556
+          },
+          {
+            "selector": "#row-2 > span:nth-of-type(1)",
+            "text": "Engine",
+            "fontPx": 14,
+            "time": 45.823,
+            "seconds": 5.85
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 4.88 s (46.07–50.94 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 46.067,
+        "seconds": 4.875,
+        "floorSeconds": 3,
+        "until": 50.942
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 10 text elements stay under it for 0.5 s or more, the smallest \"/ANALYZE\" at 14 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "/ANALYZE",
+        "selector": "#scene5-eyebrow",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene5-entry.html",
+        "bbox": {
+          "x": 434,
+          "y": 280,
+          "width": 83.45,
+          "height": 17
+        },
+        "time": 52.404,
+        "times": [
+          52.404,
+          52.404,
+          52.404,
+          55.085,
+          55.085,
+          55.329,
+          55.329,
+          55.816,
+          55.816,
+          59.472
+        ],
+        "fontPx": 14,
+        "floorPx": 28,
+        "seconds": 13.406,
+        "elements": [
+          {
+            "selector": "#scene5-eyebrow",
+            "text": "/ANALYZE",
+            "fontPx": 14,
+            "time": 52.404,
+            "seconds": 13.406
+          },
+          {
+            "selector": "#scene5-status",
+            "text": "Reading the knowledge base…",
+            "fontPx": 22,
+            "time": 59.472,
+            "seconds": 6.094
+          },
+          {
+            "selector": "#scene5-chip",
+            "text": "Fly ash · 5 t/month · Chennai",
+            "fontPx": 25.37,
+            "time": 52.404,
+            "seconds": 13.406
+          },
+          {
+            "selector": "#scene5-button",
+            "text": "Analyze with Symbio",
+            "fontPx": 25.37,
+            "time": 52.404,
+            "seconds": 13.406
+          },
+          {
+            "selector": "#field-1",
+            "text": "fly ash",
+            "fontPx": 26,
+            "time": 55.085,
+            "seconds": 10.725
+          },
+          {
+            "selector": "#field-1 > b:nth-of-type(1)",
+            "text": "Material:",
+            "fontPx": 26,
+            "time": 55.085,
+            "seconds": 10.725
+          },
+          {
+            "selector": "#field-2",
+            "text": "5 t/month",
+            "fontPx": 26,
+            "time": 55.329,
+            "seconds": 10.481
+          },
+          {
+            "selector": "#field-2 > b:nth-of-type(1)",
+            "text": "Quantity:",
+            "fontPx": 26,
+            "time": 55.329,
+            "seconds": 10.481
+          },
+          {
+            "selector": "#field-3",
+            "text": "Chennai",
+            "fontPx": 26,
+            "time": 55.816,
+            "seconds": 9.994
+          },
+          {
+            "selector": "#field-3 > b:nth-of-type(1)",
+            "text": "Location:",
+            "fontPx": 26,
+            "time": 55.816,
+            "seconds": 9.994
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 5.36 s (59.72–65.08 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 59.716,
+        "seconds": 5.362,
+        "floorSeconds": 3,
+        "until": 65.078
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 2 text elements stay under it for 0.5 s or more, the smallest \"Composition\" at 20 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Composition",
+        "selector": "#scene6-sub",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene6-id.html",
+        "bbox": {
+          "x": 470,
+          "y": 437.5,
+          "width": 159.61,
+          "height": 24
+        },
+        "time": 66.541,
+        "times": [
+          66.541,
+          66.541
+        ],
+        "fontPx": 20,
+        "floorPx": 28,
+        "seconds": 13.162,
+        "elements": [
+          {
+            "selector": "#scene6-sub",
+            "text": "Composition",
+            "fontPx": 20,
+            "time": 66.541,
+            "seconds": 13.162
+          },
+          {
+            "selector": "#scene6-confidence",
+            "text": "~80% confidence",
+            "fontPx": 26,
+            "time": 66.541,
+            "seconds": 13.162
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 6.58 s (72.39–78.97 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 72.391,
+        "seconds": 6.581,
+        "floorSeconds": 3,
+        "until": 78.972
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 8 text elements stay under it for 0.5 s or more, the smallest \"Distance\" at 16 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Distance",
+        "selector": "#scene7-stats > div:nth-of-type(1) > div:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene7-match.html",
+        "bbox": {
+          "x": 396,
+          "y": 483,
+          "width": 90.25,
+          "height": 20
+        },
+        "time": 80.434,
+        "times": [
+          80.434,
+          80.434,
+          80.434,
+          85.796,
+          87.259,
+          88.477,
+          89.94,
+          91.402
+        ],
+        "fontPx": 16,
+        "floorPx": 28,
+        "seconds": 15.356,
+        "elements": [
+          {
+            "selector": "#scene7-stats > div:nth-of-type(1) > div:nth-of-type(1)",
+            "text": "Distance",
+            "fontPx": 16,
+            "time": 80.434,
+            "seconds": 15.356
+          },
+          {
+            "selector": "#scene7-stats > div:nth-of-type(2) > div:nth-of-type(1)",
+            "text": "Est. value",
+            "fontPx": 16,
+            "time": 80.434,
+            "seconds": 15.356
+          },
+          {
+            "selector": "#scene7-stats > div:nth-of-type(3) > div:nth-of-type(1)",
+            "text": "Est. CO₂e avoided",
+            "fontPx": 16,
+            "time": 80.434,
+            "seconds": 15.356
+          },
+          {
+            "selector": "#p1",
+            "text": "Industrial Waste",
+            "fontPx": 24,
+            "time": 85.796,
+            "seconds": 9.994
+          },
+          {
+            "selector": "#p2",
+            "text": "Fly Ash",
+            "fontPx": 24,
+            "time": 87.259,
+            "seconds": 8.531
+          },
+          {
+            "selector": "#p3",
+            "text": "Processing",
+            "fontPx": 24,
+            "time": 88.477,
+            "seconds": 7.313
+          },
+          {
+            "selector": "#p4",
+            "text": "Cement Manufacturing",
+            "fontPx": 24,
+            "time": 89.94,
+            "seconds": 5.85
+          },
+          {
+            "selector": "#p5",
+            "text": "Blended Cement / Concrete",
+            "fontPx": 24,
+            "time": 91.402,
+            "seconds": 4.388
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 4.39 s (81.17–85.55 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 81.165,
+        "seconds": 4.388,
+        "floorSeconds": 3,
+        "until": 85.553
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 3.41 s (91.65–95.06 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 91.646,
+        "seconds": 3.412,
+        "floorSeconds": 3,
+        "until": 95.058
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 12 text elements stay under it for 0.5 s or more, the smallest \"Material compatibility\" at 26 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Material compatibility",
+        "selector": "#scene8-wrap > div:nth-of-type(2) > div:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene8-score.html",
+        "bbox": {
+          "x": 340,
+          "y": 403,
+          "width": 265,
+          "height": 31
+        },
+        "time": 96.033,
+        "times": [
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033,
+          96.033
+        ],
+        "fontPx": 26,
+        "floorPx": 28,
+        "seconds": 15.6,
+        "elements": [
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(2) > div:nth-of-type(1)",
+            "text": "Material compatibility",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(2) > div:nth-of-type(3)",
+            "text": "30",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(3) > div:nth-of-type(1)",
+            "text": "Quantity fit",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(3) > div:nth-of-type(3)",
+            "text": "20",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(4) > div:nth-of-type(1)",
+            "text": "Distance",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(4) > div:nth-of-type(3)",
+            "text": "15",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(5) > div:nth-of-type(1)",
+            "text": "Sector fit",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(5) > div:nth-of-type(3)",
+            "text": "15",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(6) > div:nth-of-type(1)",
+            "text": "Economic value",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(6) > div:nth-of-type(3)",
+            "text": "10",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(7) > div:nth-of-type(1)",
+            "text": "Environmental benefit",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          },
+          {
+            "selector": "#scene8-wrap > div:nth-of-type(7) > div:nth-of-type(3)",
+            "text": "10",
+            "fontPx": 26,
+            "time": 96.033,
+            "seconds": 15.6
+          }
+        ]
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 4 text elements stay under it for 0.5 s or more, the smallest \"Spent catalyst · hazardous\" at 24 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Spent catalyst · hazardous",
+        "selector": "#scene9-chip",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene9-safety.html",
+        "bbox": {
+          "x": 803.5,
+          "y": 429,
+          "width": 313,
+          "height": 29
+        },
+        "time": 112.608,
+        "times": [
+          112.608,
+          115.289,
+          116.751,
+          117.97
+        ],
+        "fontPx": 24,
+        "floorPx": 28,
+        "seconds": 11.212,
+        "elements": [
+          {
+            "selector": "#scene9-chip",
+            "text": "Spent catalyst · hazardous",
+            "fontPx": 24,
+            "time": 112.608,
+            "seconds": 11.212
+          },
+          {
+            "selector": "#excl-1 > span:nth-of-type(2)",
+            "text": "Household — excluded",
+            "fontPx": 24,
+            "time": 115.289,
+            "seconds": 8.531
+          },
+          {
+            "selector": "#excl-2 > span:nth-of-type(2)",
+            "text": "Farm — excluded",
+            "fontPx": 24,
+            "time": 116.751,
+            "seconds": 7.069
+          },
+          {
+            "selector": "#excl-3 > span:nth-of-type(2)",
+            "text": "Artisan — excluded",
+            "fontPx": 24,
+            "time": 117.97,
+            "seconds": 5.85
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 4.87 s (118.21–123.09 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 118.214,
+        "seconds": 4.874,
+        "floorSeconds": 3,
+        "until": 123.088
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 4 text elements stay under it for 0.5 s or more, the smallest \"Materials known\" at 18 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Materials known",
+        "selector": "#stat-1 > div:nth-of-type(2)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene10-scale.html",
+        "bbox": {
+          "x": 353.48,
+          "y": 582.5,
+          "width": 198.61,
+          "height": 21
+        },
+        "time": 124.795,
+        "times": [
+          124.795,
+          125.526,
+          126.501,
+          127.476
+        ],
+        "fontPx": 18,
+        "floorPx": 28,
+        "seconds": 9.018,
+        "elements": [
+          {
+            "selector": "#stat-1 > div:nth-of-type(2)",
+            "text": "Materials known",
+            "fontPx": 18,
+            "time": 124.795,
+            "seconds": 9.018
+          },
+          {
+            "selector": "#stat-2 > div:nth-of-type(2)",
+            "text": "Partners who can take something",
+            "fontPx": 18,
+            "time": 125.526,
+            "seconds": 8.287
+          },
+          {
+            "selector": "#stat-3 > div:nth-of-type(2)",
+            "text": "Seeded sources",
+            "fontPx": 18,
+            "time": 126.501,
+            "seconds": 7.312
+          },
+          {
+            "selector": "#stat-4 > div:nth-of-type(2)",
+            "text": "Seeded listings",
+            "fontPx": 18,
+            "time": 127.476,
+            "seconds": 6.337
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 5.36 s (127.72–133.08 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 127.72,
+        "seconds": 5.362,
+        "floorSeconds": 3,
+        "until": 133.082
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 3.17 s (135.03–138.20 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 135.032,
+        "seconds": 3.168,
+        "floorSeconds": 3,
+        "until": 138.2
+      },
+      {
+        "code": "text_below_floor",
+        "severity": "warning",
+        "message": "Type floor is 28 px (2.6% of the 1080 px short side, what a phone can read) and 2 text elements stay under it for 0.5 s or more, the smallest \"Analyze a material\" at 20 px: set reading text to at least 28 px, or put data-layout-ignore on text that is texture rather than reading; see references/look.md.",
+        "text": "Analyze a material",
+        "selector": "#scene11-cta",
+        "dataAttributes": {},
+        "sourceFile": "compositions/scene11-outro.html",
+        "bbox": {
+          "x": 872,
+          "y": 665,
+          "width": 176,
+          "height": 24
+        },
+        "time": 138.932,
+        "times": [
+          138.932,
+          138.932
+        ],
+        "fontPx": 20,
+        "floorPx": 28,
+        "seconds": 7.068,
+        "elements": [
+          {
+            "selector": "#scene11-cta",
+            "text": "Analyze a material",
+            "fontPx": 20,
+            "time": 138.932,
+            "seconds": 7.068
+          },
+          {
+            "selector": "#scene11-wordmark",
+            "text": "Symbio",
+            "fontPx": 24,
+            "time": 138.932,
+            "seconds": 7.068
+          }
+        ]
+      },
+      {
+        "code": "dead_stretch",
+        "severity": "warning",
+        "message": "Nothing on screen changes for 3.58 s (139.42–143.00 s): start the next move within 3 s, or put data-hold on the element whose stillness is deliberate; see references/motion.md.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 139.419,
+        "seconds": 3.581,
+        "floorSeconds": 3,
+        "until": 143
+      }
+    ],
+    "enabled": true,
+    "step": 0.24399999999999977,
+    "samples": 599
+  },
+  "audio": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  },
+  "saved": {
+    "id": "100e5f51-fbbf-47bc-ab4a-a2972a875d08",
+    "revision": "44cc43d8-6565-4cb9-938d-2e09d0e1a7e9",
+    "report": "C:\\Users\\ASUS\\Downloads\\sprint4\\symbio\\brag-output\\composition\\.hyperframes\\artifacts\\checks\\100e5f51-fbbf-47bc-ab4a-a2972a875d08.json",
+    "attribution": "recorded-revision"
+  },
+  "_meta": {
+    "version": "0.8.210",
+    "latestVersion": "0.8.210",
+    "updateAvailable": false
+  }
+}

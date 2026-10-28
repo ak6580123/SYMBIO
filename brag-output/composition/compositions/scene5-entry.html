@@ -1,0 +1,126 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background: var(--color-ground);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #scene5-panel {
+      width: 1180px;
+      background: var(--color-card);
+      border-radius: 10px;
+      padding: 56px 64px;
+      opacity: 0;
+    }
+    #scene5-eyebrow {
+      font-family: var(--font-body), sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-ink-faint);
+      margin-bottom: 14px;
+    }
+    #scene5-title {
+      font-family: var(--font-display), serif;
+      font-weight: 500;
+      font-size: 42px;
+      color: var(--color-ink);
+      margin-bottom: 36px;
+    }
+    #scene5-chip {
+      display: inline-flex;
+      padding: 16px 28px;
+      border-radius: 999px;
+      border: 2px solid var(--color-teal-ink);
+      font-family: var(--font-body), sans-serif;
+      font-weight: 600;
+      font-size: 26px;
+      color: var(--color-teal-ink);
+      background: transparent;
+    }
+    #scene5-fields {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .scene5-field {
+      font-family: var(--font-body), sans-serif;
+      font-size: 26px;
+      color: var(--color-ink-muted);
+      opacity: 0;
+    }
+    .scene5-field b {
+      color: var(--color-ink);
+      font-weight: 700;
+    }
+    #scene5-button {
+      margin-top: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 36px;
+      border-radius: 8px;
+      background: var(--color-accent-fill);
+      color: var(--color-accent-ink);
+      font-family: var(--font-body), sans-serif;
+      font-weight: 700;
+      font-size: 26px;
+      width: fit-content;
+    }
+    #scene5-status {
+      margin-top: 28px;
+      font-family: var(--font-body), sans-serif;
+      font-size: 22px;
+      color: var(--color-ink-faint);
+      opacity: 0;
+    }
+    #scene5-cursor {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--color-ink);
+      opacity: 0;
+      top: 0;
+      left: 0;
+    }
+  </style>
+  <div id="root" data-composition-id="scene5-entry" data-width="1920" data-height="1080">
+    <div id="scene5-panel">
+      <div id="scene5-eyebrow">/ANALYZE</div>
+      <div id="scene5-title">Describe the waste stream</div>
+      <div id="scene5-chip">Fly ash · 5 t/month · Chennai</div>
+      <div id="scene5-fields">
+        <div class="scene5-field" id="field-1"><b>Material:</b> fly ash</div>
+        <div class="scene5-field" id="field-2"><b>Quantity:</b> 5 t/month</div>
+        <div class="scene5-field" id="field-3"><b>Location:</b> Chennai</div>
+      </div>
+      <div id="scene5-button">Analyze with Symbio</div>
+      <div id="scene5-status">Reading the knowledge base…</div>
+    </div>
+    <div id="scene5-cursor"></div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    gsap.set("#scene5-cursor", { x: 1180, y: 300 });
+
+    tl.to("#scene5-panel", { opacity: 1, duration: 0.6, ease: "power4.out" }, 0.3)
+      .to("#scene5-cursor", { opacity: 1, duration: 0.2 }, 1.6)
+      .to("#scene5-cursor", { x: 1010, y: 512, duration: 0.7, ease: "power2.inOut" }, 1.8)
+      .to("#scene5-chip", { scale: 0.96, duration: 0.12, ease: "power1.inOut", yoyo: true, repeat: 1 }, 2.5)
+      .to("#field-1", { opacity: 1, duration: 0.3 }, 2.8)
+      .to("#field-2", { opacity: 1, duration: 0.3 }, 3.2)
+      .to("#field-3", { opacity: 1, duration: 0.3 }, 3.6)
+      .to("#scene5-cursor", { x: 1050, y: 793, duration: 0.8, ease: "power2.inOut" }, 6.0)
+      .to("#scene5-button", { scale: 0.96, duration: 0.12, ease: "power1.inOut", yoyo: true, repeat: 1 }, 6.9)
+      .to("#scene5-cursor", { opacity: 0, duration: 0.2 }, 7.1)
+      .to("#scene5-status", { opacity: 1, duration: 0.3 }, 7.3)
+      .to(["#scene5-panel", "#scene5-status"], { opacity: 0, duration: 0.6, ease: "power2.in" }, 13.1);
+    window.__timelines["scene5-entry"] = tl;
+  </script>
+</template>
